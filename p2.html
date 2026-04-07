@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Takkar P2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#07070f;--s1:#0e0e1e;--s2:#15152a;--s3:#1c1c38;--me:#3a86ff;--med:#0a1a3a;--mel:#74b0ff;--opp:#e63946;--oppd:#3a0a10;--oppl:#ff7b82;--gold:#f0b429;--g2:#ffd166;--text:#eeeef8;--t2:#7777aa;--t3:#44445a;--bdr:rgba(255,255,255,0.07);--green:#2ecc71;}
+html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;}
+#app{max-width:460px;margin:0 auto;padding-bottom:60px;}
+.scr{display:none;}.scr.on{display:block;}
+.stage{height:180px;background:var(--s1);position:relative;overflow:hidden;}
+.sl{position:absolute;top:0;left:80px;width:0;height:0;border-left:70px solid transparent;border-right:70px solid transparent;border-top:200px solid rgba(230,57,70,0.07);}
+.sr{position:absolute;top:0;right:80px;width:0;height:0;border-left:70px solid transparent;border-right:70px solid transparent;border-top:200px solid rgba(58,134,255,0.07);}
+.floor{position:absolute;bottom:0;left:0;right:0;height:44px;background:var(--s2);border-top:1px solid rgba(255,255,255,0.05);}
+.pdl{position:absolute;bottom:44px;left:56px;width:76px;height:44px;background:var(--s3);border-radius:6px 6px 0 0;border-top:2px solid var(--opp);}
+.pdr{position:absolute;bottom:44px;right:56px;width:76px;height:44px;background:var(--s3);border-radius:6px 6px 0 0;border-top:2px solid var(--me);}
+.avl{position:absolute;bottom:82px;left:81px;width:32px;height:32px;border-radius:50%;background:var(--oppd);border:2px solid var(--opp);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--oppl);}
+.avr{position:absolute;bottom:82px;right:81px;width:32px;height:32px;border-radius:50%;background:var(--med);border:2px solid var(--me);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--mel);}
+.vstxt{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:rgba(255,255,255,0.08);}
+.crowd{position:absolute;bottom:0;left:0;right:0;height:44px;display:flex;align-items:flex-end;justify-content:center;gap:5px;padding:0 10px 2px;}
+.ch{border-radius:50% 50% 0 0;background:var(--s3);}
+.stage-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--bg) 100%);}
+.topbar{background:var(--s1);border-bottom:2px solid var(--me);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--text);}
+.logo b{color:var(--me);}
+.badge{font-size:10px;letter-spacing:2px;text-transform:uppercase;background:var(--med);color:var(--mel);padding:4px 10px;border-radius:4px;border:1px solid var(--me);}
+.sbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--s1);border-bottom:1px solid var(--bdr);}
+.spl{flex:1;background:var(--s2);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:7px;border:1px solid var(--bdr);transition:border-color 0.3s;}
+.spl.hi{border-color:var(--me);}
+.sav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;color:#fff;flex-shrink:0;}
+.sname{font-size:13px;font-weight:600;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.spts{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--g2);}
+.swon{font-size:10px;color:var(--t3);}
+.svs{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--t3);flex-shrink:0;}
+.rnd{text-align:center;padding:7px;font-size:11px;color:var(--t3);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+.hero{padding:18px 16px 6px;}
+.htitle{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:3px;color:var(--text);line-height:1;margin-bottom:4px;}
+.htitle b{color:var(--me);}
+.hsub{font-size:14px;color:var(--t2);line-height:1.5;margin-bottom:18px;}
+.card{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin:0 16px 14px;}
+.inp{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.09);background:var(--s2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--me);}
+.inp::placeholder{color:var(--t3);}
+.code-inp{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:8px;text-align:center;color:var(--mel);}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;}
+.btnb{background:var(--me);color:#fff;}
+.btnb:hover{filter:brightness(1.1);}
+.btnb:disabled{opacity:0.25;cursor:not-allowed;}
+.btno{background:transparent;border:1px solid var(--bdr);color:var(--t2);font-size:15px;letter-spacing:1px;}
+.err{font-size:13px;color:var(--oppl);text-align:center;margin-top:6px;min-height:18px;}
+.joining-card{background:var(--s2);border:2px solid var(--me);border-radius:14px;padding:20px;margin:0 16px 14px;text-align:center;}
+.jname{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;color:var(--mel);margin-bottom:6px;}
+.jsub{font-size:14px;color:var(--t2);}
+.wdot{width:8px;height:8px;border-radius:50%;background:var(--me);animation:pulse 1.2s ease-in-out infinite;display:inline-block;margin:0 3px;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}
+.pick-header{padding:12px 16px 8px;background:var(--s1);border-bottom:1px solid var(--bdr);position:sticky;top:60px;z-index:10;}
+.ph-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:2px;}
+.ph-sub{font-size:12px;color:var(--t2);}
+.q-list{padding:10px 16px;}
+.qi{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;position:relative;}
+.qi:hover{border-color:var(--me);background:var(--s2);}
+.qi-type{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-bottom:8px;}
+.qi-type.mcq{background:rgba(58,134,255,0.12);color:var(--mel);border:1px solid rgba(58,134,255,0.2);}
+.qi-type.fill{background:rgba(240,180,41,0.1);color:var(--g2);border:1px solid rgba(240,180,41,0.18);}
+.qi-type.spot{background:rgba(230,57,70,0.1);color:var(--oppl);border:1px solid rgba(230,57,70,0.18);}
+.qi-type.meaning{background:rgba(46,204,113,0.1);color:#5dde8a;border:1px solid rgba(46,204,113,0.18);}
+.qi-q{font-size:15px;font-weight:600;color:var(--text);line-height:1.4;}
+.qi-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--t3);}
+.qi-used{opacity:0.3;pointer-events:none;}
+.wait-card{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:18px;margin:14px 16px;text-align:center;}
+.wc-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--opp);margin-bottom:6px;}
+.wc-q{font-size:14px;color:var(--t2);margin-bottom:14px;line-height:1.4;font-style:italic;}
+.wc-dots{display:flex;justify-content:center;gap:8px;}
+.wd{width:10px;height:10px;border-radius:50%;background:var(--opp);animation:pulse 1.2s ease-in-out infinite;}
+.wd:nth-child(2){animation-delay:0.2s;}.wd:nth-child(3){animation-delay:0.4s;}
+.ans-q-card{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin:0 16px 12px;position:relative;overflow:hidden;}
+.ans-q-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--opp);}
+.aqtype{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:3px 10px;border-radius:4px;margin-bottom:10px;}
+.aqtype.mcq{background:rgba(230,57,70,0.12);color:var(--oppl);border:1px solid rgba(230,57,70,0.2);}
+.aqtype.fill{background:rgba(240,180,41,0.1);color:var(--g2);border:1px solid rgba(240,180,41,0.18);}
+.aqtype.spot{background:rgba(58,134,255,0.1);color:var(--mel);border:1px solid rgba(58,134,255,0.18);}
+.aqtype.meaning{background:rgba(46,204,113,0.1);color:#5dde8a;border:1px solid rgba(46,204,113,0.18);}
+.aq-text{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:600;color:var(--text);line-height:1.45;text-align:center;}
+.opts-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;padding:0 16px;}
+.opt{padding:13px 10px;border-radius:9px;border:1px solid rgba(255,255,255,0.08);background:var(--s2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.15s;text-align:center;}
+.opt:hover:not(:disabled){border-color:var(--me);background:rgba(58,134,255,0.06);}
+.opt.correct{background:rgba(46,204,113,0.15);border-color:var(--green);color:#5dde8a;}
+.opt.wrong{background:rgba(230,57,70,0.12);border-color:var(--opp);color:var(--oppl);}
+.opt:disabled{cursor:default;}
+.text-inp-wrap{padding:0 16px;margin-bottom:10px;}
+.text-inp{width:100%;padding:12px 14px;border-radius:9px;border:1px solid rgba(255,255,255,0.08);background:var(--s2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:500;outline:none;transition:border-color 0.15s;}
+.text-inp:focus{border-color:var(--me);}
+.text-inp::placeholder{color:var(--t3);}
+.text-inp:disabled{opacity:0.5;}
+.act-wrap{padding:0 16px;margin-bottom:8px;}
+.btnb-act{flex:1;padding:13px;border-radius:9px;border:none;background:var(--me);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;}
+.btn-skip-sm{padding:13px 14px;border-radius:9px;border:1px solid var(--bdr);background:transparent;color:var(--t3);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;cursor:pointer;}
+.rr-card{background:var(--s1);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;margin:0 16px 12px;}
+.rr-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:12px;}
+.rr-row{display:flex;gap:8px;margin-bottom:10px;}
+.rr-p{flex:1;border-radius:10px;padding:12px;text-align:center;}
+.rr-p.ok{background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.25);}
+.rr-p.bad{background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.2);}
+.rr-pname{font-size:11px;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;}
+.rr-pans{font-size:14px;font-weight:600;color:var(--text);}
+.rr-pres{font-size:12px;margin-top:4px;}
+.rr-p.ok .rr-pres{color:var(--green);}.rr-p.bad .rr-pres{color:var(--oppl);}
+.rr-correct{font-size:12px;color:var(--t3);text-align:center;margin-top:6px;}
+.fin-card{background:var(--s1);border:2px solid var(--gold);border-radius:16px;padding:20px;margin:14px 16px;text-align:center;}
+.fin-res{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;margin-bottom:4px;}
+.fin-sc{font-family:'Bebas Neue',sans-serif;font-size:68px;color:var(--g2);line-height:1;}
+.fin-sub{font-size:14px;color:var(--t2);margin-bottom:16px;}
+.cmp{display:flex;gap:10px;margin:0 16px 14px;}
+.cmp-b{flex:1;background:var(--s2);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--bdr);}
+.cmp-b.win{border-color:var(--g2);}
+.cmp-name{font-size:13px;color:var(--t2);margin-bottom:4px;font-weight:600;}
+.cmp-pts{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;}
+.cmp-b.win .cmp-pts{color:var(--g2);}.cmp-b:not(.win) .cmp-pts{color:var(--t3);}
+.cmp-det{font-size:11px;color:var(--t3);margin-top:3px;}
+.dots{display:flex;gap:4px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+.dt{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.dt.w{background:rgba(46,204,113,0.2);border:1px solid var(--green);color:var(--green);}
+.dt.l{background:rgba(230,57,70,0.1);border:1px solid var(--opp);color:var(--oppl);}
+.dt.s{background:rgba(255,255,255,0.03);border:1px solid var(--bdr);color:var(--t3);}
+.share-btn{width:calc(100% - 32px);margin:0 16px 8px;padding:14px;border-radius:10px;border:none;background:var(--g2);color:#111;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;}
+.again-btn{width:calc(100% - 32px);margin:0 16px;padding:12px;border-radius:10px;border:1px solid var(--bdr);background:transparent;color:var(--t2);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+.toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--gold);color:var(--g2);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:200;white-space:nowrap;transition:opacity 0.4s;}
+@keyframes up{from{transform:translateY(12px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.anim{animation:up 0.25s ease forwards;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div id="app">
+
+<!-- JOIN -->
+<div id="s-join" class="scr on">
+  <div class="stage">
+    <div class="sl"></div><div class="sr"></div>
+    <div class="floor"></div>
+    <div class="pdl"></div><div class="pdr"></div>
+    <div class="avl">P1</div>
+    <div class="avr" id="my-av">P2</div>
+    <div class="vstxt">VS</div>
+    <div class="crowd">
+      <div class="ch" style="width:28px;height:20px"></div><div class="ch" style="width:22px;height:16px"></div>
+      <div class="ch" style="width:26px;height:22px"></div><div class="ch" style="width:20px;height:14px"></div>
+      <div class="ch" style="width:30px;height:24px"></div><div class="ch" style="width:24px;height:18px"></div>
+      <div class="ch" style="width:28px;height:20px"></div><div class="ch" style="width:22px;height:16px"></div>
+    </div>
+    <div class="stage-fade"></div>
+  </div>
+  <div class="hero">
+    <div class="htitle">TAK<b>KAR</b></div>
+    <div class="htitle" style="font-size:16px;letter-spacing:4px;color:var(--t2);margin-bottom:12px;">JOIN THE BATTLE</div>
+    <div class="hsub">Enter your name and the room code from Player 1.</div>
+  </div>
+  <div class="card">
+    <input class="inp" id="name-inp" placeholder="Your name..." maxlength="14" autocomplete="off"/>
+    <input class="inp code-inp" id="code-inp" placeholder="123456" maxlength="6" type="number" autocomplete="off"/>
+    <div class="err" id="err-msg"></div>
+    <button class="btn btnb" id="join-btn" onclick="joinRoom()" disabled>Join Battle →</button>
+  </div>
+</div>
+
+<!-- JOINING -->
+<div id="s-joining" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">PLAYER 2</div></div>
+  <div class="joining-card" style="margin-top:14px;">
+    <div class="jname" id="vs-name">vs Player 1</div>
+    <div class="jsub">Joined! Waiting for match to start...</div>
+    <div style="margin-top:12px;"><span class="wdot"></span><span class="wdot"></span><span class="wdot"></span></div>
+  </div>
+</div>
+
+<!-- WAITING (P1 is picking) -->
+<div id="s-wait" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">PLAYER 2</div></div>
+  <div class="sbar">
+    <div class="spl hi" id="sp-me"><div class="sav" style="background:var(--med);" id="av-me">P2</div><div><div class="sname" id="sn-me">You</div><div class="swon" id="sw-me">0 won</div></div><div class="spts" id="ss-me">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl" id="sp-opp"><div class="sav" style="background:var(--oppd);" id="av-opp">P1</div><div><div class="sname" id="sn-opp">Opp</div><div class="swon" id="sw-opp">0 won</div></div><div class="spts" id="ss-opp">0</div></div>
+  </div>
+  <div class="rnd" id="rnd-lbl">Round 1 of 6</div>
+  <div class="wait-card">
+    <div class="wc-title" id="wc-opp">Player 1</div>
+    <div style="font-size:12px;color:var(--t3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">is picking your question</div>
+    <div class="wc-q">Get ready to answer...</div>
+    <div class="wc-dots"><div class="wd"></div><div class="wd"></div><div class="wd"></div></div>
+  </div>
+</div>
+
+<!-- ANSWER QUESTION -->
+<div id="s-answer" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">PLAYER 2</div></div>
+  <div class="sbar">
+    <div class="spl hi"><div class="sav" style="background:var(--med);" id="av-me2">P2</div><div><div class="sname" id="sn-me2">You</div><div class="swon" id="sw-me2">0 won</div></div><div class="spts" id="ss-me2">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl"><div class="sav" style="background:var(--oppd);" id="av-opp2">P1</div><div><div class="sname" id="sn-opp2">Opp</div><div class="swon" id="sw-opp2">0 won</div></div><div class="spts" id="ss-opp2">0</div></div>
+  </div>
+  <div class="rnd" id="rnd-ans">Round 1 of 6</div>
+  <div style="padding:8px 0 0;">
+    <div class="ans-q-card">
+      <div class="aqtype" id="aq-type">Choose</div>
+      <div style="font-size:11px;color:var(--t3);margin-bottom:6px;font-style:italic;" id="aq-from">Question from Player 1</div>
+      <div class="aq-text" id="aq-text">Loading...</div>
+    </div>
+    <div id="ans-opts"></div>
+    <div id="ans-inp-wrap"></div>
+    <div id="ans-act"></div>
+  </div>
+</div>
+
+<!-- P2 PICKS QUESTION FOR P1 -->
+<div id="s-pick" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">PLAYER 2</div></div>
+  <div class="sbar">
+    <div class="spl hi"><div class="sav" style="background:var(--med);" id="av-me3">P2</div><div><div class="sname" id="sn-me3">You</div><div class="swon" id="sw-me3">0 won</div></div><div class="spts" id="ss-me3">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl"><div class="sav" style="background:var(--oppd);" id="av-opp3">P1</div><div><div class="sname" id="sn-opp3">Opp</div><div class="swon" id="sw-opp3">0 won</div></div><div class="spts" id="ss-opp3">0</div></div>
+  </div>
+  <div class="rnd" id="rnd-pick">Round 1 of 6</div>
+  <div class="pick-header">
+    <div class="ph-title">🎯 PICK A QUESTION FOR YOUR OPPONENT</div>
+    <div class="ph-sub" id="pick-sub2">Choose wisely!</div>
+  </div>
+  <div class="q-list" id="q-list2"></div>
+</div>
+
+<!-- ROUND RESULT -->
+<div id="s-rresult" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">ROUND RESULT</div></div>
+  <div class="sbar">
+    <div class="spl hi"><div class="sav" style="background:var(--med);" id="av-me4">P2</div><div><div class="sname" id="sn-me4">You</div><div class="swon" id="sw-me4">0 won</div></div><div class="spts" id="ss-me4">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl"><div class="sav" style="background:var(--oppd);" id="av-opp4">P1</div><div><div class="sname" id="sn-opp4">Opp</div><div class="swon" id="sw-opp4">0 won</div></div><div class="spts" id="ss-opp4">0</div></div>
+  </div>
+  <div style="padding:12px 0 0;">
+    <div class="rr-card anim" id="rr-card"></div>
+    <div style="padding:0 16px;" id="rr-next"></div>
+  </div>
+</div>
+
+<!-- FINAL -->
+<div id="s-final" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">FINAL</div></div>
+  <div class="fin-card" id="fin-card">
+    <div class="fin-res" id="fin-res">RESULT</div>
+    <div class="fin-sc" id="fin-sc">0</div>
+    <div class="fin-sub" id="fin-sub">points</div>
+  </div>
+  <div class="cmp">
+    <div class="cmp-b" id="cmp-me"><div class="cmp-name" id="cfn-me">P2</div><div class="cmp-pts" id="cfs-me">0</div><div class="cmp-det" id="cfd-me">0/6</div><div class="dots" id="cdots-me"></div></div>
+    <div class="cmp-b" id="cmp-opp"><div class="cmp-name" id="cfn-opp">P1</div><div class="cmp-pts" id="cfs-opp">0</div><div class="cmp-det" id="cfd-opp">0/6</div><div class="dots" id="cdots-opp"></div></div>
+  </div>
+  <button class="share-btn" onclick="doShare()">📤 Share Result</button>
+  <button class="again-btn" onclick="location.reload()">Play Again</button>
+</div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+const FB={apiKey:"AIzaSyDUgPWK9rpcjQx5i-68FBL3VNlofbCITw8",authDomain:"engraji-f6a36.firebaseapp.com",databaseURL:"https://engraji-f6a36-default-rtdb.firebaseio.com",projectId:"engraji-f6a36",storageBucket:"engraji-f6a36.firebasestorage.app",messagingSenderId:"564439682700",appId:"1:564439682700:web:1d8ceee2951239189035a9"};
+firebase.initializeApp(FB);
+const db=firebase.database();
+
+const QS={
+  beginner:[
+    {id:'b1',type:'mcq',q:'She ___ to school every day.',opts:['go','goes','going','gone'],ans:1,ex:'"She" is 3rd person singular — always "goes".'},
+    {id:'b2',type:'mcq',q:'I ___ seen that movie before.',opts:['have','has','had','am'],ans:0,ex:'"I" + present perfect = "have seen".'},
+    {id:'b3',type:'fill',q:'They ___ playing cricket right now.',ans:['are'],ex:'Present continuous with "they" = "are playing".'},
+    {id:'b4',type:'spot',q:'"He don\'t like mangoes."',correct:'He doesn\'t like mangoes.',ex:'With he/she/it use "doesn\'t" not "don\'t".'},
+    {id:'b5',type:'meaning',q:'What does "enormous" mean?',opts:['Very small','Very large','Very fast','Very old'],ans:1,ex:'"Enormous" = extremely large in size.'},
+    {id:'b6',type:'fill',q:'I wake up ___ 6 o\'clock every morning.',ans:['at'],ex:'Use "at" for specific clock times.'},
+    {id:'b7',type:'spot',q:'"Yesterday I go to the market."',correct:'Yesterday I went to the market.',ex:'"Yesterday" = past. "go" → "went".'},
+    {id:'b8',type:'mcq',q:'There ___ a dog in the garden.',opts:['are','is','were','be'],ans:1,ex:'"There IS" for singular nouns.'},
+    {id:'b9',type:'meaning',q:'What does "brave" mean?',opts:['Afraid','Courageous','Tired','Angry'],ans:1,ex:'"Brave" = showing courage.'},
+    {id:'b10',type:'spot',q:'"She is more taller than her sister."',correct:'She is taller than her sister.',ex:'Never "more" with "-er" comparatives.'},
+    {id:'b11',type:'fill',q:'We ___ friends since childhood.',ans:['have been'],ex:'"Since" + present perfect = "have been".'},
+    {id:'b12',type:'mcq',q:'She ___ to school yesterday.',opts:['go','goes','went','gone'],ans:2,ex:'Past tense of "go" = "went".'},
+  ],
+  intermediate:[
+    {id:'i1',type:'spot',q:'"If I would have money, I will buy a car."',correct:'If I had money, I would buy a car.',ex:'Second conditional: "If + past simple, would + base verb."'},
+    {id:'i2',type:'mcq',q:'The report ___ submitted by 5 PM yesterday.',opts:['was','were','had','is'],ans:0,ex:'Passive past simple, singular = "was submitted".'},
+    {id:'i3',type:'fill',q:'She has been working here ___ 2019.',ans:['since'],ex:'"Since" = specific point. "For" = duration.'},
+    {id:'i4',type:'meaning',q:'What does "ambiguous" mean?',opts:['Very clear','Open to two meanings','Completely wrong','Very brief'],ans:1,ex:'"Ambiguous" = having more than one possible meaning.'},
+    {id:'i5',type:'mcq',q:'"___ you finish, call me immediately."',opts:['Until','Once','Unless','Despite'],ans:1,ex:'"Once" = as soon as / after completing.'},
+    {id:'i6',type:'spot',q:'"He suggested that she goes to the doctor."',correct:'He suggested that she go to the doctor.',ex:'After "suggest" use subjunctive: "go" not "goes".'},
+    {id:'i7',type:'fill',q:'By the time I arrived, they ___ already left.',ans:['had'],ex:'Past perfect: "had left" before I "arrived".'},
+    {id:'i8',type:'meaning',q:'What does "inevitable" mean?',opts:['Avoidable','Certain to happen','Very surprising','Unfair'],ans:1,ex:'"Inevitable" = impossible to prevent.'},
+    {id:'i9',type:'spot',q:'"The team are playing good today."',correct:'The team is playing well today.',ex:'"Team" = singular → "is". Use "well" not "good".'},
+    {id:'i10',type:'mcq',q:'"She is used to ___ early every morning."',opts:['wake','waking','woke','woken'],ans:1,ex:'"Be used to" always takes gerund (verb+ing).'},
+    {id:'i11',type:'fill',q:'I wish I ___ speak French fluently.',ans:['could'],ex:'"Wish + could" = desire for ability you lack.'},
+    {id:'i12',type:'mcq',q:'"Neither the players nor the coach ___ satisfied."',opts:['was','were','are','is'],ans:0,ex:'"Neither...nor" — verb agrees with closer noun.'},
+  ],
+  advanced:[
+    {id:'a1',type:'meaning',q:'What does "perfidious" mean?',opts:['Very loyal','Deceitful & treacherous','Brave','Overly cautious'],ans:1,ex:'"Perfidious" = deliberately faithless.'},
+    {id:'a2',type:'spot',q:'"The data shows that less people are reading."',correct:'The data show that fewer people are reading.',ex:'"Data" is plural. "Fewer" for countable nouns.'},
+    {id:'a3',type:'fill',q:'No sooner ___ he arrived than chaos began.',ans:['had'],ex:'"No sooner had + subject + V3" — inverted structure.'},
+    {id:'a4',type:'mcq',q:'"She spoke with such ___ that everyone was persuaded."',opts:['conviction','convincing','convinced','convince'],ans:0,ex:'"Such + noun" — "conviction" is the noun.'},
+    {id:'a5',type:'spot',q:'"Between you and I, this will fail."',correct:'Between you and me, this will fail.',ex:'"Between" takes object pronoun "me" not "I".'},
+    {id:'a6',type:'meaning',q:'What does "sycophantic" mean?',opts:['Overly critical','Excessively flattering','Philosophical','Reluctant'],ans:1,ex:'"Sycophantic" = flattering to gain favour.'},
+    {id:'a7',type:'fill',q:'Had I known, I ___ taken a different route.',ans:['would have',"would've"],ex:'Third conditional inverted.'},
+    {id:'a8',type:'spot',q:'"Irregardless of the outcome, we proceed."',correct:'Regardless of the outcome, we proceed.',ex:'"Irregardless" is incorrect. Use "regardless".'},
+    {id:'a9',type:'meaning',q:'What does "tendentious" mean?',opts:['Neutral','Promoting a biased view','Careful','Striking'],ans:1,ex:'"Tendentious" = promoting a particular cause.'},
+    {id:'a10',type:'fill',q:'The speech was ___ with contradictions.',ans:['riddled','laced'],ex:'"Riddled with" = full of (negatives).'},
+    {id:'a11',type:'spot',q:'"This is the most unique proposal I\'ve seen."',correct:'This is a unique proposal.',ex:'"Unique" is absolute — cannot say "most unique".'},
+    {id:'a12',type:'mcq',q:'"She spoke with such ___ that everyone was moved."',opts:['passion','passionate','passionately','passioned'],ans:0,ex:'"Such + noun": "passion" is the noun.'},
+  ]
+};
+
+let myName='',oppName='',level=null,roomCode=null,roomRef=null;
+let allQs=[],availableQs=[],usedQIds=[];
+let round=0,totalRounds=6;
+let myScore=0,oppScore=0,myWon=0,oppWon=0;
+let myResults=[],currentQ=null;
+
+document.getElementById('name-inp').addEventListener('input',chk);
+document.getElementById('code-inp').addEventListener('input',chk);
+function chk(){ const n=el('name-inp').value.trim(),c=el('code-inp').value.trim(); el('join-btn').disabled=!(n&&c.length===6); }
+
+function joinRoom(){
+  myName=el('name-inp').value.trim()||'Player 2';
+  roomCode=el('code-inp').value.trim();
+  roomRef=db.ref('takkar/'+roomCode);
+  el('err-msg').textContent='';
+
+  roomRef.once('value').then(snap=>{
+    const r=snap.val();
+    if(!r){ el('err-msg').textContent='Room not found. Check the code.'; return; }
+    if(r.status!=='waiting'&&r.status!=='playing'){ el('err-msg').textContent='Game already started!'; return; }
+
+    oppName=r.p1.name;
+    level=r.level;
+    allQs=shuffle([...QS[level]]);
+    availableQs=[...allQs];
+
+    roomRef.child('p2/name').set(myName);
+    roomRef.child('p2/score').set(0);
+    roomRef.child('p2/won').set(0);
+
+    el('vs-name').textContent='vs '+oppName;
+    el('wc-opp').textContent=oppName;
+    updateAll();
+    show('s-joining');
+
+    // Listen for game to start
+    roomRef.child('status').on('value', snap=>{
+      if(snap.val()==='playing'){
+        roomRef.child('status').off();
+        startListening();
+      }
+    });
+  }).catch(()=>{ el('err-msg').textContent='Connection error. Try again.'; });
+}
+
+function startListening(){
+  round=0;
+  updateAll();
+  listenForStatus();
+}
+
+function listenForStatus(){
+  roomRef.child('status').on('value', snap=>{
+    const s=snap.val();
+    if(s==='p2answering'){
+      // P1 picked a question for me
+      roomRef.child('currentQ').once('value').then(sq=>{
+        const q=sq.val();
+        if(q&&q.round>round){ // new question
+          round=q.round;
+          currentQ=q;
+          roomRef.child('status').off();
+          showAnswerScreen(q);
+        }
+      });
+    } else if(s==='p2picking'){
+      // My turn to pick for P1
+      roomRef.child('status').off();
+      showPickScreen();
+    } else if(s==='gameover'||s==='p1done'){
+      roomRef.child('status').off();
+      showFinal();
+    }
+  });
+}
+
+function showAnswerScreen(q){
+  el('rnd-ans').textContent='Round '+round+' of '+totalRounds;
+  el('aq-type').textContent=typeLabel(q.type);
+  el('aq-type').className='aqtype '+q.type;
+  el('aq-from').textContent='Question from '+oppName;
+  el('aq-text').textContent=q.q;
+  updateAll();
+
+  const ao=el('ans-opts'),ai=el('ans-inp-wrap'),aa=el('ans-act');
+  ao.innerHTML=''; ai.innerHTML=''; aa.innerHTML='';
+
+  if(q.type==='mcq'||q.type==='meaning'){
+    const g=document.createElement('div'); g.className='opts-grid';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button'); b.className='opt'; b.textContent=o;
+      b.onclick=()=>submitAns(String(i),q,b,g);
+      g.appendChild(b);
+    });
+    ao.appendChild(g);
+    aa.innerHTML='<div class="act-wrap"><div style="display:flex;gap:8px;"><button class="btn-skip-sm" onclick="skipAns()">Skip</button></div></div>';
+  } else {
+    const ph=q.type==='spot'?'Type the corrected sentence...':'Type the missing word(s)...';
+    ai.innerHTML=`<div class="text-inp-wrap"><input class="text-inp" id="t-inp" placeholder="${ph}" autocomplete="off"/></div>`;
+    aa.innerHTML='<div class="act-wrap" style="display:flex;gap:8px;"><button class="btn-skip-sm" onclick="skipAns()">Skip</button><button class="btnb-act" onclick="submitTyped()">Submit</button></div>';
+    setTimeout(()=>{ const i=el('t-inp'); if(i) i.addEventListener('keydown',e=>{ if(e.key==='Enter') submitTyped(); }); },100);
+  }
+  show('s-answer');
+}
+
+function submitTyped(){
+  const i=el('t-inp'); if(!i||!i.value.trim()) return;
+  submitAns(i.value.trim(), currentQ, null, null);
+}
+
+function submitAns(val, q, btn, grid){
+  const ok=checkAnswer(q,val);
+  const disp=q.opts?(q.opts[Number(val)]||val):String(val);
+  if(ok){ myScore+=10; myWon++; }
+  myResults.push({correct:ok,val:disp});
+
+  if(grid){ grid.querySelectorAll('.opt').forEach(b=>b.disabled=true); grid.querySelectorAll('.opt')[q.ans].classList.add('correct'); if(!ok&&typeof Number(val)===typeof 0) try{ grid.querySelectorAll('.opt')[Number(val)].classList.add('wrong'); }catch(e){} }
+  if(el('t-inp')) el('t-inp').disabled=true;
+
+  roomRef.child('p2answer').set({val:disp,correct:ok});
+  roomRef.child('p2/score').set(myScore);
+  roomRef.child('p2/won').set(myWon);
+  updateAll();
+
+  // Show quick feedback then wait for P1 to show result screen
+  const ans=q.opts?q.opts[q.ans]:(q.correct||(q.ans||[]).join('/'));
+  el('ans-act').innerHTML=`<div style="padding:0 16px;"><div style="background:${ok?'rgba(46,204,113,0.1)':'rgba(230,57,70,0.08)'};border:1px solid ${ok?'rgba(46,204,113,0.3)':'rgba(230,57,70,0.25)'};border-radius:10px;padding:12px;text-align:center;margin-bottom:10px;"><div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:${ok?'var(--green)':'var(--oppl)'};">${ok?'CORRECT! +10':'WRONG!'}</div><div style="font-size:12px;color:var(--t2);margin-top:4px;">${ok?q.ex:'Answer: <strong style="color:var(--text)">'+ans+'</strong><br/>'+q.ex}</div></div></div>`;
+
+  // Now wait for P1's next status signal
+  setTimeout(listenForStatus, 1000);
+}
+
+function skipAns(){
+  submitAns('(skipped)', currentQ, null, null);
+}
+
+function showPickScreen(){
+  round++;
+  updateAll();
+  el('rnd-pick').textContent='Round '+round+' of '+totalRounds;
+  el('pick-sub2').textContent='Pick a question for '+oppName;
+  renderPickList();
+  show('s-pick');
+}
+
+function renderPickList(){
+  const list=el('q-list2'); list.innerHTML='';
+  availableQs.forEach(q=>{
+    const used=usedQIds.includes(q.id);
+    const div=document.createElement('div');
+    div.className='qi anim'+(used?' qi-used':'');
+    div.innerHTML=`<div class="qi-type ${q.type}">${typeLabel(q.type)}</div><div class="qi-q">${q.q}</div><div class="qi-arrow">→</div>`;
+    if(!used) div.onclick=()=>pickForP1(q);
+    list.appendChild(div);
+  });
+}
+
+function pickForP1(q){
+  usedQIds.push(q.id);
+  currentQ=q;
+  roomRef.child('currentQ').set({...q,round});
+  roomRef.child('p1answer').set(null);
+  roomRef.child('status').set('p1answering');
+
+  // Wait for P1 to answer
+  el('wc-opp').textContent=oppName;
+  el('rnd-lbl').textContent='Round '+round+' of '+totalRounds;
+  show('s-wait');
+
+  roomRef.child('p1answer').on('value', snap=>{
+    const d=snap.val();
+    if(d!==null&&d!==undefined){
+      roomRef.child('p1answer').off();
+      showP2RoundResult(d);
+    }
+  });
+}
+
+function showP2RoundResult(p1ans){
+  const q=currentQ;
+  if(p1ans.correct){ oppScore+=10; oppWon++; }
+  updateAll();
+
+  const ans=q.opts?q.opts[q.ans]:(q.correct||(q.ans||[]).join('/'));
+  el('rr-card').innerHTML=`
+    <div class="rr-title">⚔️ ROUND ${round} RESULT</div>
+    <div class="rr-row">
+      <div class="rr-p ok"><div class="rr-pname">${myName} (Picked)</div><div class="rr-pans">+0 pts</div><div class="rr-pres">You chose this question</div></div>
+      <div class="rr-p ${p1ans.correct?'ok':'bad'}"><div class="rr-pname">${oppName}</div><div class="rr-pans">${p1ans.val}</div><div class="rr-pres">${p1ans.correct?'✓ Correct +10':'✗ Wrong'}</div></div>
+    </div>
+    <div class="rr-correct">Correct: <strong style="color:var(--text)">${ans}</strong><br/><span style="color:var(--t3);font-size:11px;">${q.ex}</span></div>`;
+
+  const isLast=round>=totalRounds;
+  el('rr-next').innerHTML=`<button class="btn btnb" style="margin-top:8px;" onclick="${isLast?'showFinal()':'waitForMyTurn()'}">${isLast?'See Final Result →':'Wait for My Question →'}</button>`;
+  show('s-rresult');
+}
+
+function waitForMyTurn(){
+  roomRef.child('status').set('p1picking');
+  show('s-wait');
+  listenForStatus();
+}
+
+function showFinal(){
+  roomRef.child('p1').once('value').then(snap=>{
+    const p1d=snap.val()||{};
+    const p1s=p1d.score||oppScore;
+    const p1w=p1d.won||oppWon;
+    oppScore=p1s; oppWon=p1w;
+
+    const iWon=myScore>p1s,tied=myScore===p1s;
+    const fc=el('fin-card');
+    if(tied){ fc.style.borderColor='var(--gold)'; el('fin-res').textContent="IT'S A TIE!"; el('fin-res').style.color='var(--g2)'; }
+    else if(iWon){ fc.style.borderColor='var(--green)'; el('fin-res').textContent='YOU WIN! 🏆'; el('fin-res').style.color='var(--green)'; }
+    else{ fc.style.borderColor='var(--opp)'; el('fin-res').textContent='YOU LOSE'; el('fin-res').style.color='var(--oppl)'; }
+
+    el('fin-sc').textContent=myScore;
+    el('fin-sub').textContent='points · '+myWon+'/'+totalRounds+' correct';
+    el('cfn-me').textContent=myName; el('cfs-me').textContent=myScore; el('cfd-me').textContent=myWon+'/'+totalRounds;
+    el('cfn-opp').textContent=oppName; el('cfs-opp').textContent=p1s; el('cfd-opp').textContent=p1w+'/'+totalRounds;
+    if(iWon) el('cmp-me').classList.add('win'); else if(!tied) el('cmp-opp').classList.add('win');
+
+    myResults.forEach(r=>{ const d=document.createElement('div'); d.className='dt '+(r.correct?'w':'l'); d.textContent=r.correct?'W':'L'; el('cdots-me').appendChild(d); });
+    roomRef.child('p2readyfinal').set(true);
+    show('s-final');
+  });
+}
+
+function doShare(){
+  const dots=myResults.map(r=>r.correct?'🔵':'⚫').join('');
+  const res=myScore>oppScore?'I WON 🏆':myScore===oppScore?"Tied!":"I lost";
+  const txt=`⚔️ Takkar — English Battle\n\n${myName}: ${myScore}pts\n${oppName}: ${oppScore}pts\n${res}\n${dots}\n\nPlay at engraji.com`;
+  navigator.clipboard.writeText(txt).catch(()=>{});
+  showToast('Copied! Share on WhatsApp ✓');
+}
+
+function checkAnswer(q,val){
+  if(!val||val==='(skipped)') return false;
+  if(q.type==='mcq'||q.type==='meaning') return Number(val)===q.ans;
+  if(q.type==='fill'){ const v=String(val).trim().toLowerCase(); return q.ans.some(a=>v===a.toLowerCase()||v.includes(a.toLowerCase())); }
+  if(q.type==='spot'){ const v=String(val).trim().toLowerCase(),k=q.correct.toLowerCase(); const s=v.split(' '),t=k.split(' '); return v===k||s.filter(w=>t.includes(w)).length/Math.max(s.length,t.length)>0.75; }
+  return false;
+}
+function typeLabel(t){ return {mcq:'Choose',fill:'Fill Blank',spot:'Spot Error',meaning:'Meaning'}[t]||t; }
+function shuffle(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]; } return b; }
+function el(id){ return document.getElementById(id); }
+function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on')); el(id).classList.add('on'); window.scrollTo(0,0); }
+function showToast(msg){ const t=el('toast'); t.textContent=msg; t.style.display='block'; t.style.opacity='1'; setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=>t.style.display='none',400); },2500); }
+function updateAll(){
+  const ids=[['me','me2','me3','me4'],['opp','opp2','opp3','opp4']];
+  ids[0].forEach(s=>{ if(el('sn-'+s)) el('sn-'+s).textContent=myName; if(el('ss-'+s)) el('ss-'+s).textContent=myScore; if(el('sw-'+s)) el('sw-'+s).textContent=myWon+' won'; if(el('av-'+s)) el('av-'+s).textContent=myName[0]?.toUpperCase()||'P'; });
+  ids[1].forEach(s=>{ if(el('sn-'+s)) el('sn-'+s).textContent=oppName||'P1'; if(el('ss-'+s)) el('ss-'+s).textContent=oppScore; if(el('sw-'+s)) el('sw-'+s).textContent=oppWon+' won'; if(el('av-'+s)) el('av-'+s).textContent=oppName[0]?.toUpperCase()||'O'; });
+}
+</script>
+</body>
+</html>
