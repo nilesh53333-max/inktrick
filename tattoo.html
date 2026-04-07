@@ -4,6 +4,7 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
   <title>InkTrick — AI Tattoo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&family=Great+Vibes&family=Dancing+Script:wght@700&display=swap" rel="stylesheet"/>
   <style>
     *{margin:0;padding:0;box-sizing:border-box;}
     body{background:#0c0b09;color:#f0e8d0;font-family:Georgia,serif;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:22px 14px 50px;}
@@ -22,6 +23,19 @@
     .style-btn.active{background:rgba(200,168,74,0.12);border-color:#c8a84a;color:#c8a84a;}
     .sicon{font-size:1.3rem;flex-shrink:0;}
     .sdesc{font-size:0.5rem;opacity:0.55;margin-top:2px;}
+
+    /* Font style selector */
+    .font-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+    .font-btn{background:rgba(255,255,255,0.03);border:1.5px solid #2a2518;color:#6a5a3a;padding:10px 6px;cursor:pointer;border-radius:3px;text-align:center;transition:all 0.2s;font-size:1.1rem;}
+    .font-btn.active{background:rgba(200,168,74,0.12);border-color:#c8a84a;}
+    .font-preview{font-size:1.1rem;display:block;margin-bottom:2px;}
+    .font-label{font-family:Georgia,serif;font-size:0.48rem;letter-spacing:0.15em;color:#6a5a3a;text-transform:uppercase;}
+
+    /* Position slider */
+    .slider-row{display:flex;align-items:center;gap:10px;margin-top:8px;}
+    .slider-lbl{font-size:0.52rem;color:#6a5a3a;text-transform:uppercase;letter-spacing:0.2em;white-space:nowrap;}
+    input[type=range]{flex:1;accent-color:#c8a84a;background:none;}
+
     .gen-btn{width:100%;background:linear-gradient(135deg,#a8841a,#c8a84a);border:1px solid #c8a84a;border-radius:3px;color:#0c0b09;font-family:Georgia,serif;font-size:0.85rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:15px;cursor:pointer;transition:all 0.3s;}
     .gen-btn:disabled{background:rgba(200,168,74,0.08);color:#c8a84a;cursor:not-allowed;}
     .err{color:#e07060;font-size:0.78rem;padding:10px 14px;background:rgba(176,48,24,0.08);border:1px solid rgba(176,48,24,0.2);border-radius:3px;display:none;}
@@ -33,79 +47,33 @@
     .lmsg{font-size:0.72rem;color:#6a5a3a;font-style:italic;}
     .lsub{font-size:0.58rem;color:#6a5a3a;opacity:0.5;margin-top:6px;}
 
-    /* Result box */
+    /* Result */
     .result{border:1px solid #2a2518;border-radius:4px;overflow:hidden;display:none;}
     .rh{padding:9px 16px;background:#131108;border-bottom:1px solid #2a2518;display:flex;justify-content:space-between;align-items:center;}
     .rn{font-size:0.75rem;letter-spacing:0.2em;color:#c8a84a;}
     .rt{font-size:0.54rem;color:#6a5a3a;font-style:italic;}
 
-    /* Image container with overlay */
-    .img-wrap{position:relative;width:100%;background:#f5f0e8;}
-    .img-wrap img{width:100%;display:block;}
+    /* Canvas container */
+    .canvas-wrap{position:relative;width:100%;background:#f5f0e8;}
+    canvas{width:100%;display:block;}
 
-    /* Letter reveal dots on image */
-    .reveal-dot{
-      position:absolute;
-      border-radius:50%;
-      transform:translate(-50%,-50%);
-      pointer-events:none;
-      opacity:0;
-      transition:opacity 0.4s;
-    }
-    .reveal-dot.show{opacity:1;}
-    .reveal-dot .ring{
-      position:absolute;
-      inset:-8px;
-      border-radius:50%;
-      border:2px solid #b03018;
-      animation:none;
-    }
-    .reveal-dot.show .ring{
-      animation:ripple 1.2s ease-out infinite;
-    }
-    @keyframes ripple{
-      0%{transform:scale(0.8);opacity:1;}
-      100%{transform:scale(2.2);opacity:0;}
-    }
-    .reveal-dot .inner{
-      width:28px;height:28px;
-      border-radius:50%;
-      background:rgba(176,48,24,0.25);
-      border:2px solid #b03018;
-      display:flex;align-items:center;justify-content:center;
-      font-family:Georgia,serif;
-      font-size:13px;font-weight:700;
-      color:#b03018;
-      position:relative;z-index:2;
-    }
-
-    /* Controls */
+    /* Reveal controls */
     .controls{padding:14px 16px;border-top:1px solid #2a2518;background:#131108;}
     .ctrl-label{font-size:0.54rem;letter-spacing:0.35em;color:#6a5a3a;text-transform:uppercase;margin-bottom:10px;text-align:center;}
     .letter-btns{display:flex;gap:5px;flex-wrap:wrap;justify-content:center;margin-bottom:10px;}
-    .lbtn{
-      background:rgba(255,255,255,0.04);
-      border:1.5px solid #2a2518;
-      color:#6a5a3a;
-      font-family:Georgia,serif;font-weight:400;
-      font-size:1rem;padding:9px 4px;
-      cursor:pointer;border-radius:3px;
-      min-width:38px;text-align:center;
-      transition:all 0.25s;
-    }
-    .lbtn.on{
-      background:rgba(176,48,24,0.18);
-      border-color:#b03018;
-      color:#d06040;
-      font-weight:800;
-    }
+    .lbtn{background:rgba(255,255,255,0.04);border:1.5px solid #2a2518;color:#6a5a3a;font-family:Georgia,serif;font-weight:400;font-size:1rem;padding:9px 4px;cursor:pointer;border-radius:3px;min-width:38px;text-align:center;transition:all 0.25s;}
+    .lbtn.on{background:rgba(176,48,24,0.18);border-color:#b03018;color:#d06040;font-weight:800;}
     .action-btns{display:flex;gap:8px;}
     .reveal-all-btn{background:none;border:1px solid rgba(200,168,74,0.4);color:#c8a84a;font-family:Georgia,serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:9px;cursor:pointer;border-radius:2px;flex:1;}
     .hide-all-btn{background:none;border:1px solid #2a2518;color:#6a5a3a;font-family:Georgia,serif;font-size:0.6rem;letter-spacing:0.22em;text-transform:uppercase;padding:9px;cursor:pointer;border-radius:2px;flex:1;}
 
+    /* Adjust panel */
+    .adjust{padding:12px 16px;border-top:1px solid #2a2518;background:#0f0d09;}
+    .adj-lbl{font-size:0.5rem;letter-spacing:0.4em;color:#6a5a3a;text-transform:uppercase;margin-bottom:10px;}
+
     .rnote{padding:10px 14px;background:rgba(200,168,74,0.04);border-top:1px solid #2a2518;font-size:0.68rem;color:#6a5a3a;font-style:italic;line-height:1.6;}
     .ra{padding:11px 14px;background:#131108;border-top:1px solid #2a2518;display:flex;gap:8px;}
-    .bopen{flex:2;background:rgba(200,168,74,0.1);border:1px solid rgba(200,168,74,0.4);color:#c8a84a;font-family:Georgia,serif;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;padding:10px;border-radius:3px;cursor:pointer;text-decoration:none;text-align:center;display:block;}
+    .bopen{flex:2;background:rgba(200,168,74,0.1);border:1px solid rgba(200,168,74,0.4);color:#c8a84a;font-family:Georgia,serif;font-size:0.62rem;letter-spacing:0.2em;text-transform:uppercase;padding:10px;border-radius:3px;cursor:pointer;text-align:center;display:block;}
     .bretry{flex:1;background:none;border:1px solid #2a2518;color:#6a5a3a;font-family:Georgia,serif;font-size:0.62rem;letter-spacing:0.15em;text-transform:uppercase;padding:10px;cursor:pointer;border-radius:3px;}
     .footer{margin-top:20px;text-align:center;font-style:italic;font-size:0.68rem;color:#3a3020;}
   </style>
@@ -131,18 +99,23 @@
     <!-- Name -->
     <div class="card">
       <div class="lbl">Name to hide</div>
-      <input type="text" id="nameInput" placeholder="e.g. Priya or Nilesh" maxlength="12"
-        onkeydown="if(event.key==='Enter')generate()"/>
+      <input type="text" id="nameInput" placeholder="e.g. Priya or Nilesh" maxlength="14"
+        oninput="updatePreview()" onkeydown="if(event.key==='Enter')generate()"/>
     </div>
 
-    <!-- Styles -->
+    <!-- Style -->
     <div class="card">
       <div class="lbl">Tattoo style</div>
       <div class="styles-grid" id="styleGrid"></div>
     </div>
 
-    <div class="err" id="errBox"></div>
+    <!-- Name font style -->
+    <div class="card">
+      <div class="lbl">Name style</div>
+      <div class="font-grid" id="fontGrid"></div>
+    </div>
 
+    <div class="err" id="errBox"></div>
     <button class="gen-btn" id="genBtn" onclick="generate()">✦ Generate Tattoo</button>
 
     <div class="loading" id="loadBox">
@@ -155,18 +128,16 @@
     <div class="result" id="resultBox">
       <div class="rh">
         <span class="rn" id="rn"></span>
-        <span class="rt">DALL·E 3</span>
+        <span class="rt">DALL·E 3 + InkTrick</span>
       </div>
 
-      <!-- Image with letter dots overlay -->
-      <div class="img-wrap" id="imgWrap">
-        <img id="resultImg" src="" alt="AI tattoo"/>
-        <!-- Letter dots injected here by JS -->
+      <div class="canvas-wrap">
+        <canvas id="tattooCanvas"></canvas>
       </div>
 
-      <!-- Tap to reveal controls -->
+      <!-- Controls -->
       <div class="controls">
-        <div class="ctrl-label">Tap each letter to reveal it in the design</div>
+        <div class="ctrl-label">Tap each letter to reveal it</div>
         <div class="letter-btns" id="letterBtns"></div>
         <div class="action-btns">
           <button class="reveal-all-btn" onclick="revealAll()">◎ Reveal All</button>
@@ -174,10 +145,31 @@
         </div>
       </div>
 
+      <!-- Adjust position -->
+      <div class="adjust">
+        <div class="adj-lbl">Adjust name position</div>
+        <div class="slider-row">
+          <span class="slider-lbl">↕ Y</span>
+          <input type="range" id="posY" min="10" max="90" value="50" oninput="redraw()"/>
+        </div>
+        <div class="slider-row">
+          <span class="slider-lbl">↔ X</span>
+          <input type="range" id="posX" min="10" max="90" value="50" oninput="redraw()"/>
+        </div>
+        <div class="slider-row">
+          <span class="slider-lbl">Size</span>
+          <input type="range" id="fontSize" min="20" max="80" value="42" oninput="redraw()"/>
+        </div>
+        <div class="slider-row">
+          <span class="slider-lbl">Rotate</span>
+          <input type="range" id="rotation" min="-30" max="30" value="-5" oninput="redraw()"/>
+        </div>
+      </div>
+
       <div class="rnote" id="rnote"></div>
 
       <div class="ra">
-        <a class="bopen" id="openBtn" href="#" target="_blank">↗ Open Full Size</a>
+        <button class="bopen" onclick="downloadCanvas()">↓ Download</button>
         <button class="bretry" onclick="resetResult()">↺ New Design</button>
       </div>
     </div>
@@ -193,74 +185,49 @@
     const WORKER = 'https://wild-fog-b15e.nilesh53333.workers.dev';
 
     const STYLES = [
-      { id:'rose',    label:'Rose',    icon:'🌹', desc:'Name in thorns & petals',
-        prompt: n=>`Minimalist fine line tattoo flash art on white background. Single rose with thorns and leaves. The name "${n}" is camouflaged within the design — each letter formed by thorn shapes, petal curves, and stem lines, not written as separate text. Black ink only, no color, no shading, professional tattoo artist style.`,
-        // Zones: where each letter approximately appears (as % of image width/height)
-        // For a horizontal rose stem: letters spread left to right along the stem
-        zones: (name) => name.split('').map((l,i,a) => ({
-          x: 15 + (i / Math.max(a.length-1,1)) * 70,
-          y: 30 + Math.sin(i * 0.8) * 20 + 20,
-        }))
-      },
-      { id:'lotus',   label:'Lotus',   icon:'🪷', desc:'Name in lotus petals',
-        prompt: n=>`Minimalist fine line tattoo flash art on white background. Sacred lotus flower with mandala geometry. The name "${n}" is camouflaged within — letters formed by petal lines and geometric patterns, not written as text. Black ink only, no color, no shading, professional tattoo artist style.`,
-        // Circular arrangement — letters around the lotus petals
-        zones: (name) => name.split('').map((l,i,a) => {
-          const angle = (i/a.length)*360 - 90;
-          const rad = angle * Math.PI/180;
-          return { x: 50 + Math.cos(rad)*32, y: 50 + Math.sin(rad)*32 };
-        })
-      },
-      { id:'serpent', label:'Serpent', icon:'🐍', desc:'Name in snake scales',
-        prompt: n=>`Minimalist fine line tattoo flash art on white background. Elegant coiled serpent with detailed scales. The name "${n}" is camouflaged within — letters formed by scale patterns, not written as text. Black ink only, no color, no shading, professional tattoo artist style.`,
-        // Spiral — follows the coil of the snake
-        zones: (name) => name.split('').map((l,i,a) => {
-          const angle = (i/a.length)*300 - 60;
-          const rad = angle * Math.PI/180;
-          const r = 15 + i*(22/a.length);
-          return { x: 50 + Math.cos(rad)*r, y: 50 + Math.sin(rad)*r };
-        })
-      },
-      { id:'wolf',    label:'Wolf',    icon:'🐺', desc:'Name in wolf geometry',
-        prompt: n=>`Minimalist fine line geometric tattoo flash art on white background. Low-poly wolf portrait. The name "${n}" is camouflaged within — letters formed by geometric facets and fur strokes, not written as text. Black ink only, no color, no shading, professional tattoo artist style.`,
-        // Scattered across the wolf face/body
-        zones: (name) => name.split('').map((l,i,a) => ({
-          x: 20 + (i/Math.max(a.length-1,1))*60 + (i%2)*10,
-          y: 20 + (i%3)*20 + 10,
-        }))
-      },
-      { id:'moon',    label:'Moon',    icon:'🌙', desc:'Name in celestial art',
-        prompt: n=>`Minimalist fine line tattoo flash art on white background. Crescent moon with ornamental patterns and stars. The name "${n}" is camouflaged within — letters formed by moon decorations and star patterns, not written as text. Black ink only, no color, no shading, professional tattoo artist style.`,
-        // Arc following the crescent shape
-        zones: (name) => name.split('').map((l,i,a) => {
-          const angle = -120 + (i/Math.max(a.length-1,1))*120;
-          const rad = angle * Math.PI/180;
-          return { x: 50 + Math.cos(rad)*30, y: 50 + Math.sin(rad)*30 };
-        })
-      },
-      { id:'mandala', label:'Mandala', icon:'🔮', desc:'Name in mandala rings',
-        prompt: n=>`Minimalist fine line tattoo flash art on white background. Ornate circular mandala. The name "${n}" is camouflaged within — letters formed by geometric ornamental patterns, not written as text. Black ink only, no color, no shading, professional tattoo artist style.`,
-        // Ring around mandala
-        zones: (name) => name.split('').map((l,i,a) => {
-          const angle = (i/a.length)*360 - 90;
-          const rad = angle * Math.PI/180;
-          return { x: 50 + Math.cos(rad)*28, y: 50 + Math.sin(rad)*28 };
-        })
-      },
+      { id:'rose',    label:'Rose',    icon:'🌹', desc:'Thorns & petals',
+        prompt:`Minimalist fine line tattoo flash art. Single rose with thorns, stem and leaves. Black ink on white background. NO TEXT, NO WORDS, NO LETTERS, NO SIGNATURES anywhere in the image. Only the botanical rose illustration. Clean professional tattoo linework.`},
+      { id:'lotus',   label:'Lotus',   icon:'🪷', desc:'Sacred petals',
+        prompt:`Minimalist fine line tattoo flash art. Sacred lotus flower with mandala geometry. Black ink on white background. NO TEXT, NO WORDS, NO LETTERS, NO SIGNATURES. Only the lotus illustration. Clean professional tattoo linework.`},
+      { id:'serpent', label:'Serpent', icon:'🐍', desc:'Snake scales',
+        prompt:`Minimalist fine line tattoo flash art. Elegant coiled serpent with detailed scales. Black ink on white background. NO TEXT, NO WORDS, NO LETTERS, NO SIGNATURES. Only the serpent illustration. Clean professional tattoo linework.`},
+      { id:'wolf',    label:'Wolf',    icon:'🐺', desc:'Geometric wolf',
+        prompt:`Minimalist fine line geometric tattoo flash art. Low-poly wolf portrait. Black ink on white background. NO TEXT, NO WORDS, NO LETTERS, NO SIGNATURES. Only the wolf illustration. Clean professional tattoo linework.`},
+      { id:'moon',    label:'Moon',    icon:'🌙', desc:'Celestial crescent',
+        prompt:`Minimalist fine line tattoo flash art. Crescent moon with ornamental patterns and stars. Black ink on white background. NO TEXT, NO WORDS, NO LETTERS, NO SIGNATURES. Only the celestial illustration. Clean professional tattoo linework.`},
+      { id:'mandala', label:'Mandala', icon:'🔮', desc:'Sacred rings',
+        prompt:`Minimalist fine line tattoo flash art. Ornate circular mandala with intricate geometric patterns. Black ink on white background. NO TEXT, NO WORDS, NO LETTERS, NO SIGNATURES. Only the mandala. Clean professional tattoo linework.`},
     ];
 
-    let si = 0;
+    const FONTS = [
+      { id:'script',  label:'Script',  family:'Pinyon Script', preview:'Abc' },
+      { id:'elegant', label:'Elegant', family:'Great Vibes',   preview:'Abc' },
+      { id:'bold',    label:'Bold',    family:'Dancing Script',preview:'Abc' },
+    ];
+
+    let si = 0, fi = 0;
     let currentName = '';
     let activeLetters = {};
+    let tattooImg = null;
 
     // Build style grid
-    const grid = document.getElementById('styleGrid');
+    const sgrid = document.getElementById('styleGrid');
     STYLES.forEach((s,i)=>{
       const btn=document.createElement('button');
       btn.className='style-btn'+(i===0?' active':'');
       btn.innerHTML=`<span class="sicon">${s.icon}</span><div><div>${s.label}</div><div class="sdesc">${s.desc}</div></div>`;
       btn.onclick=()=>{si=i;document.querySelectorAll('.style-btn').forEach((b,j)=>b.className='style-btn'+(j===i?' active':''));};
-      grid.appendChild(btn);
+      sgrid.appendChild(btn);
+    });
+
+    // Build font grid
+    const fgrid = document.getElementById('fontGrid');
+    FONTS.forEach((f,i)=>{
+      const btn=document.createElement('button');
+      btn.className='font-btn'+(i===0?' active':'');
+      btn.innerHTML=`<span class="font-preview" style="font-family:'${f.family}',cursive">${f.preview}</span><span class="font-label">${f.label}</span>`;
+      btn.onclick=()=>{fi=i;document.querySelectorAll('.font-btn').forEach((b,j)=>b.className='font-btn'+(j===i?' active':''));redraw();};
+      fgrid.appendChild(btn);
     });
 
     function toggleKey(){
@@ -270,10 +237,10 @@
       else{inp.type='password';btn.textContent='Show';}
     }
 
-    const MSGS=['Sketching the design…','Hiding your name in the art…','Adding fine details…','Almost ready…'];
+    const MSGS=['Drawing the tattoo…','Refining the lines…','Adding details…','Almost done…'];
 
     async function generate(){
-      const name=document.getElementById('nameInput').value.trim().toUpperCase().replace(/[^A-Z]/g,'');
+      const name=document.getElementById('nameInput').value.trim();
       const key=document.getElementById('apiKey').value.trim();
       if(!name){showErr('Please enter a name.');return;}
       if(!key){showErr('Please enter your OpenAI API key.');return;}
@@ -287,7 +254,7 @@
         const res=await fetch(WORKER,{
           method:'POST',
           headers:{'Content-Type':'application/json'},
-          body:JSON.stringify({type:'openai_image',apiKey:key,prompt:STYLES[si].prompt(name)})
+          body:JSON.stringify({type:'openai_image',apiKey:key,prompt:STYLES[si].prompt})
         });
         clearInterval(iv);
         const data=await res.json();
@@ -298,19 +265,24 @@
         currentName = name;
         activeLetters = {};
 
-        // Set image
-        document.getElementById('rn').textContent=`${name} · ${STYLES[si].icon} ${STYLES[si].label}`;
-        document.getElementById('resultImg').src=url;
-        document.getElementById('rnote').textContent=`✦ Tap each letter below to reveal where it is hidden in the design.`;
-        document.getElementById('openBtn').href=url;
-
-        // Build letter dots on image
-        buildLetterDots(name);
-
-        // Build letter buttons
-        buildLetterButtons(name);
-
-        document.getElementById('resultBox').style.display='block';
+        // Load image into canvas
+        const img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+          tattooImg = img;
+          setupCanvas(img);
+          buildLetterButtons(name);
+          document.getElementById('rn').textContent=`${name.toUpperCase()} · ${STYLES[si].icon} ${STYLES[si].label}`;
+          document.getElementById('rnote').textContent=`✦ Tap each letter below to reveal where it appears in the design.`;
+          document.getElementById('resultBox').style.display='block';
+          redraw();
+        };
+        img.onerror = () => {
+          // If crossOrigin fails, just show image tag
+          tattooImg = null;
+          showDirectImage(url, name);
+        };
+        img.src = url;
 
       }catch(e){
         clearInterval(iv);
@@ -318,70 +290,136 @@
       }finally{setLoad(false);}
     }
 
-    function buildLetterDots(name){
-      const wrap = document.getElementById('imgWrap');
-      // Remove old dots
-      wrap.querySelectorAll('.reveal-dot').forEach(d=>d.remove());
+    function setupCanvas(img){
+      const canvas = document.getElementById('tattooCanvas');
+      const size = 512;
+      canvas.width = size;
+      canvas.height = size;
+    }
 
-      const zones = STYLES[si].zones(name);
-      name.split('').forEach((letter, i) => {
-        const zone = zones[i];
-        const dot = document.createElement('div');
-        dot.className = 'reveal-dot';
-        dot.id = `dot-${i}`;
-        dot.style.left = zone.x + '%';
-        dot.style.top  = zone.y + '%';
-        dot.innerHTML = `<div class="ring"></div><div class="inner">${letter}</div>`;
-        wrap.appendChild(dot);
+    function redraw(){
+      if(!tattooImg) return;
+      const canvas = document.getElementById('tattooCanvas');
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+
+      // Draw tattoo image
+      ctx.clearRect(0,0,W,H);
+      ctx.drawImage(tattooImg, 0, 0, W, H);
+
+      // Get position settings
+      const px = parseInt(document.getElementById('posX').value) / 100;
+      const py = parseInt(document.getElementById('posY').value) / 100;
+      const fs = parseInt(document.getElementById('fontSize').value);
+      const rot = parseInt(document.getElementById('rotation').value) * Math.PI / 180;
+
+      // Draw name — hidden (very faint ink color, blends with tattoo)
+      const font = FONTS[fi];
+      ctx.save();
+      ctx.translate(W * px, H * py);
+      ctx.rotate(rot);
+      ctx.font = `${fs}px '${font.family}', cursive`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      // Draw each letter
+      const name = currentName;
+      const letters = name.split('');
+      const totalW = ctx.measureText(name).width;
+      let xOffset = -totalW/2;
+
+      letters.forEach((letter, i) => {
+        const lw = ctx.measureText(letter).width;
+        const isOn = !!activeLetters[i];
+
+        ctx.save();
+        ctx.translate(xOffset + lw/2, 0);
+
+        if(isOn){
+          // Revealed — red glow
+          ctx.shadowColor = '#b03018';
+          ctx.shadowBlur = 12;
+          ctx.fillStyle = '#b03018';
+          ctx.globalAlpha = 1;
+        } else {
+          // Hidden — dark ink, barely visible, blends with design
+          ctx.shadowBlur = 0;
+          ctx.fillStyle = '#1a1208';
+          ctx.globalAlpha = 0.18; // very faint — hard to see
+        }
+
+        ctx.fillText(letter, 0, 0);
+        ctx.restore();
+        xOffset += lw;
       });
+
+      ctx.restore();
+
+      // Watermark
+      ctx.save();
+      ctx.font = '10px Georgia, serif';
+      ctx.fillStyle = '#1a1208';
+      ctx.globalAlpha = 0.2;
+      ctx.textAlign = 'center';
+      ctx.fillText('INKTRICK.COM', W/2, H - 8);
+      ctx.restore();
     }
 
     function buildLetterButtons(name){
       const btns = document.getElementById('letterBtns');
-      btns.innerHTML = '';
-      name.split('').forEach((letter, i) => {
-        const btn = document.createElement('button');
-        btn.className = 'lbtn';
-        btn.id = `lbtn-${i}`;
-        btn.textContent = letter;
-        btn.onclick = () => toggleLetter(i, letter);
+      btns.innerHTML='';
+      name.split('').forEach((letter,i)=>{
+        const btn=document.createElement('button');
+        btn.className='lbtn';
+        btn.id=`lbtn-${i}`;
+        btn.textContent=letter;
+        btn.onclick=()=>toggleLetter(i);
         btns.appendChild(btn);
       });
     }
 
-    function toggleLetter(i, letter){
-      activeLetters[i] = !activeLetters[i];
-      const dot = document.getElementById(`dot-${i}`);
-      const btn = document.getElementById(`lbtn-${i}`);
-      if(activeLetters[i]){
-        dot && dot.classList.add('show');
-        btn && btn.classList.add('on');
-      } else {
-        dot && dot.classList.remove('show');
-        btn && btn.classList.remove('on');
-      }
+    function toggleLetter(i){
+      activeLetters[i]=!activeLetters[i];
+      document.getElementById(`lbtn-${i}`)?.classList.toggle('on', !!activeLetters[i]);
+      redraw();
     }
 
     function revealAll(){
-      currentName.split('').forEach((_,i) => {
-        activeLetters[i] = true;
-        document.getElementById(`dot-${i}`)?.classList.add('show');
+      currentName.split('').forEach((_,i)=>{
+        activeLetters[i]=true;
         document.getElementById(`lbtn-${i}`)?.classList.add('on');
       });
+      redraw();
     }
 
     function hideAll(){
-      currentName.split('').forEach((_,i) => {
-        activeLetters[i] = false;
-        document.getElementById(`dot-${i}`)?.classList.remove('show');
+      currentName.split('').forEach((_,i)=>{
+        activeLetters[i]=false;
         document.getElementById(`lbtn-${i}`)?.classList.remove('on');
       });
+      redraw();
+    }
+
+    function downloadCanvas(){
+      const canvas=document.getElementById('tattooCanvas');
+      const a=document.createElement('a');
+      a.download=`inktrick-${currentName}.png`;
+      a.href=canvas.toDataURL('image/png');
+      a.click();
+    }
+
+    function showDirectImage(url, name){
+      // Fallback if canvas fails — just show image
+      const wrap=document.querySelector('.canvas-wrap');
+      wrap.innerHTML=`<img src="${url}" style="width:100%;display:block;" alt="tattoo"/>`;
+      buildLetterButtons(name);
+      document.getElementById('rn').textContent=`${name.toUpperCase()} · ${STYLES[si].icon} ${STYLES[si].label}`;
+      document.getElementById('resultBox').style.display='block';
     }
 
     function resetResult(){
       document.getElementById('resultBox').style.display='none';
-      currentName='';
-      activeLetters={};
+      currentName=''; activeLetters={}; tattooImg=null;
     }
 
     function setLoad(on){
