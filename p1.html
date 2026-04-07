@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
+<title>Takkar P1</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+:root{--bg:#07070f;--s1:#0e0e1e;--s2:#15152a;--s3:#1c1c38;--me:#e63946;--med:#3a0a10;--mel:#ff7b82;--opp:#3a86ff;--oppd:#0a1a3a;--oppl:#74b0ff;--gold:#f0b429;--g2:#ffd166;--text:#eeeef8;--t2:#7777aa;--t3:#44445a;--bdr:rgba(255,255,255,0.07);--green:#2ecc71;}
+html,body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;min-height:100vh;}
+#app{max-width:460px;margin:0 auto;padding-bottom:60px;}
+.scr{display:none;}.scr.on{display:block;}
+
+/* ── STAGE VISUAL ── */
+.stage{height:180px;background:var(--s1);position:relative;overflow:hidden;}
+.sl{position:absolute;top:0;left:80px;width:0;height:0;border-left:70px solid transparent;border-right:70px solid transparent;border-top:200px solid rgba(230,57,70,0.07);}
+.sr{position:absolute;top:0;right:80px;width:0;height:0;border-left:70px solid transparent;border-right:70px solid transparent;border-top:200px solid rgba(58,134,255,0.07);}
+.floor{position:absolute;bottom:0;left:0;right:0;height:44px;background:var(--s2);border-top:1px solid rgba(255,255,255,0.05);}
+.pdl{position:absolute;bottom:44px;left:56px;width:76px;height:44px;background:var(--s3);border-radius:6px 6px 0 0;border-top:2px solid var(--me);}
+.pdr{position:absolute;bottom:44px;right:56px;width:76px;height:44px;background:var(--s3);border-radius:6px 6px 0 0;border-top:2px solid var(--opp);}
+.avl{position:absolute;bottom:82px;left:81px;width:32px;height:32px;border-radius:50%;background:var(--med);border:2px solid var(--me);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--mel);}
+.avr{position:absolute;bottom:82px;right:81px;width:32px;height:32px;border-radius:50%;background:var(--oppd);border:2px solid var(--opp);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:14px;color:var(--oppl);}
+.vstxt{position:absolute;bottom:60px;left:50%;transform:translateX(-50%);font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;color:rgba(255,255,255,0.08);}
+.crowd{position:absolute;bottom:0;left:0;right:0;height:44px;display:flex;align-items:flex-end;justify-content:center;gap:5px;padding:0 10px 2px;}
+.ch{border-radius:50% 50% 0 0;background:var(--s3);}
+.stage-fade{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,var(--bg) 100%);}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--s1);border-bottom:2px solid var(--me);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
+.logo{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:var(--text);}
+.logo b{color:var(--me);}
+.badge{font-size:10px;letter-spacing:2px;text-transform:uppercase;background:var(--med);color:var(--mel);padding:4px 10px;border-radius:4px;border:1px solid var(--me);}
+
+/* ── SCORE BAR ── */
+.sbar{display:flex;align-items:center;gap:8px;padding:9px 14px;background:var(--s1);border-bottom:1px solid var(--bdr);}
+.spl{flex:1;background:var(--s2);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:7px;border:1px solid var(--bdr);transition:border-color 0.3s;}
+.spl.hi{border-color:var(--me);}
+.sav{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:12px;color:#fff;flex-shrink:0;}
+.sname{font-size:13px;font-weight:600;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.spts{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--g2);}
+.swon{font-size:10px;color:var(--t3);}
+.svs{font-family:'Bebas Neue',sans-serif;font-size:15px;color:var(--t3);flex-shrink:0;}
+.rnd{text-align:center;padding:7px;font-size:11px;color:var(--t3);font-family:'Bebas Neue',sans-serif;letter-spacing:1px;}
+
+/* ── SETUP ── */
+.hero{padding:18px 16px 6px;}
+.htitle{font-family:'Bebas Neue',sans-serif;font-size:38px;letter-spacing:3px;color:var(--text);line-height:1;margin-bottom:4px;}
+.htitle b{color:var(--me);}
+.hsub{font-size:14px;color:var(--t2);line-height:1.5;margin-bottom:18px;}
+.sec-lbl{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:9px;padding:0 16px;}
+.card{background:var(--s1);border:1px solid var(--bdr);border-radius:14px;padding:16px;margin:0 16px 14px;}
+.inp{width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.09);background:var(--s2);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;outline:none;margin-bottom:10px;}
+.inp:focus{border-color:var(--me);}
+.inp::placeholder{color:var(--t3);}
+.lrow{display:flex;gap:8px;margin-bottom:14px;}
+.lb{flex:1;padding:10px 6px;border-radius:9px;border:1px solid rgba(255,255,255,0.08);background:transparent;color:var(--t2);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;cursor:pointer;text-align:center;transition:all 0.15s;}
+.lb:hover{border-color:var(--me);color:var(--mel);}
+.lb.on{border-color:var(--me);background:rgba(230,57,70,0.08);color:var(--mel);}
+.lb-ic{font-size:15px;display:block;margin-bottom:3px;}
+.lb-s{font-size:10px;opacity:0.6;margin-top:2px;}
+.btn{width:100%;padding:14px;border-radius:10px;border:none;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;transition:all 0.15s;}
+.btnr{background:var(--me);color:#fff;}
+.btnr:hover{filter:brightness(1.1);}
+.btnr:disabled{opacity:0.25;cursor:not-allowed;}
+.btno{background:transparent;border:1px solid var(--bdr);color:var(--t2);font-size:15px;letter-spacing:1px;margin-top:8px;}
+.btno:hover{background:var(--s2);}
+
+/* ── WAITING ── */
+.code-box{background:var(--s2);border:2px solid var(--me);border-radius:14px;padding:20px;margin:0 16px 14px;text-align:center;}
+.code-lbl{font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--t2);margin-bottom:10px;}
+.code-num{font-family:'Bebas Neue',sans-serif;font-size:56px;letter-spacing:10px;color:var(--me);line-height:1;}
+.code-sub{font-size:12px;color:var(--t2);margin-top:8px;}
+.wdot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:pulse 1.2s ease-in-out infinite;display:inline-block;margin:0 3px;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.3;transform:scale(0.6);}}
+.joined-msg{display:none;background:rgba(46,204,113,0.08);border:1px solid rgba(46,204,113,0.3);border-radius:10px;padding:12px 16px;margin:0 16px;text-align:center;color:var(--green);font-size:14px;font-weight:600;}
+
+/* ── QUESTION PICKER ── */
+.pick-header{padding:12px 16px 8px;background:var(--s1);border-bottom:1px solid var(--bdr);position:sticky;top:60px;z-index:10;}
+.ph-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:2px;}
+.ph-sub{font-size:12px;color:var(--t2);}
+.q-list{padding:10px 16px;}
+.qi{background:var(--s1);border:1px solid var(--bdr);border-radius:12px;padding:14px;margin-bottom:10px;cursor:pointer;transition:all 0.15s;position:relative;}
+.qi:hover{border-color:var(--me);background:var(--s2);}
+.qi-type{display:inline-block;font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;padding:2px 8px;border-radius:4px;margin-bottom:8px;}
+.qi-type.mcq{background:rgba(230,57,70,0.12);color:var(--mel);border:1px solid rgba(230,57,70,0.2);}
+.qi-type.fill{background:rgba(240,180,41,0.1);color:var(--g2);border:1px solid rgba(240,180,41,0.18);}
+.qi-type.spot{background:rgba(58,134,255,0.1);color:var(--oppl);border:1px solid rgba(58,134,255,0.2);}
+.qi-type.meaning{background:rgba(46,204,113,0.1);color:#5dde8a;border:1px solid rgba(46,204,113,0.18);}
+.qi-q{font-size:15px;font-weight:600;color:var(--text);line-height:1.4;}
+.qi-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:18px;color:var(--t3);}
+.qi-used{opacity:0.3;pointer-events:none;}
+.qi-used::after{content:'USED';position:absolute;top:10px;right:10px;font-size:9px;letter-spacing:2px;color:var(--t3);border:1px solid var(--t3);padding:2px 6px;border-radius:3px;}
+
+/* ── WAITING FOR P2 TO ANSWER ── */
+.wait-card{background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:18px;margin:0 16px;text-align:center;}
+.wc-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--opp);margin-bottom:6px;}
+.wc-q{font-size:14px;color:var(--t2);margin-bottom:14px;line-height:1.4;font-style:italic;}
+.wc-dots{display:flex;justify-content:center;gap:8px;}
+.wd{width:10px;height:10px;border-radius:50%;background:var(--opp);animation:pulse 1.2s ease-in-out infinite;}
+.wd:nth-child(2){animation-delay:0.2s;}.wd:nth-child(3){animation-delay:0.4s;}
+
+/* ── ROUND RESULT ── */
+.rr-card{background:var(--s1);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:16px;margin:0 16px 12px;}
+.rr-title{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--gold);margin-bottom:12px;}
+.rr-row{display:flex;gap:8px;margin-bottom:10px;}
+.rr-p{flex:1;border-radius:10px;padding:12px;text-align:center;}
+.rr-p.ok{background:rgba(46,204,113,0.1);border:1px solid rgba(46,204,113,0.25);}
+.rr-p.bad{background:rgba(230,57,70,0.08);border:1px solid rgba(230,57,70,0.2);}
+.rr-pname{font-size:11px;color:var(--t3);margin-bottom:4px;text-transform:uppercase;letter-spacing:1px;}
+.rr-pans{font-size:14px;font-weight:600;color:var(--text);}
+.rr-pres{font-size:12px;margin-top:4px;}
+.rr-p.ok .rr-pres{color:var(--green);}.rr-p.bad .rr-pres{color:var(--mel);}
+.rr-correct{font-size:12px;color:var(--t3);text-align:center;margin-top:6px;}
+
+/* ── FINAL RESULT ── */
+.fin-card{background:var(--s1);border:2px solid var(--gold);border-radius:16px;padding:20px;margin:14px 16px;text-align:center;}
+.fin-res{font-family:'Bebas Neue',sans-serif;font-size:44px;letter-spacing:3px;margin-bottom:4px;}
+.fin-sc{font-family:'Bebas Neue',sans-serif;font-size:68px;color:var(--g2);line-height:1;}
+.fin-sub{font-size:14px;color:var(--t2);margin-bottom:16px;}
+.cmp{display:flex;gap:10px;margin:0 16px 14px;}
+.cmp-b{flex:1;background:var(--s2);border-radius:10px;padding:14px;text-align:center;border:1px solid var(--bdr);}
+.cmp-b.win{border-color:var(--g2);}
+.cmp-name{font-size:13px;color:var(--t2);margin-bottom:4px;font-weight:600;}
+.cmp-pts{font-family:'Bebas Neue',sans-serif;font-size:40px;line-height:1;}
+.cmp-b.win .cmp-pts{color:var(--g2);}.cmp-b:not(.win) .cmp-pts{color:var(--t3);}
+.cmp-det{font-size:11px;color:var(--t3);margin-top:3px;}
+.dots{display:flex;gap:4px;justify-content:center;margin-top:8px;flex-wrap:wrap;}
+.dt{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;}
+.dt.w{background:rgba(46,204,113,0.2);border:1px solid var(--green);color:var(--green);}
+.dt.l{background:rgba(230,57,70,0.1);border:1px solid var(--me);color:var(--mel);}
+.dt.s{background:rgba(255,255,255,0.03);border:1px solid var(--bdr);color:var(--t3);}
+.share-btn{width:calc(100% - 32px);margin:0 16px 8px;padding:14px;border-radius:10px;border:none;background:var(--g2);color:#111;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;cursor:pointer;}
+.again-btn{width:calc(100% - 32px);margin:0 16px;padding:12px;border-radius:10px;border:1px solid var(--bdr);background:transparent;color:var(--t2);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;cursor:pointer;}
+.toast{display:none;position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--gold);color:var(--g2);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:600;z-index:200;white-space:nowrap;transition:opacity 0.4s;}
+@keyframes up{from{transform:translateY(12px);opacity:0;}to{transform:translateY(0);opacity:1;}}
+.anim{animation:up 0.25s ease forwards;}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+<div id="app">
+
+<!-- SETUP -->
+<div id="s-setup" class="scr on">
+  <div class="stage">
+    <div class="sl"></div><div class="sr"></div>
+    <div class="floor"></div>
+    <div class="pdl"></div><div class="pdr"></div>
+    <div class="avl" id="av-me">P1</div>
+    <div class="avr" id="av-opp">P2</div>
+    <div class="vstxt">VS</div>
+    <div class="crowd">
+      <div class="ch" style="width:28px;height:20px"></div><div class="ch" style="width:22px;height:16px"></div>
+      <div class="ch" style="width:26px;height:22px"></div><div class="ch" style="width:20px;height:14px"></div>
+      <div class="ch" style="width:30px;height:24px"></div><div class="ch" style="width:24px;height:18px"></div>
+      <div class="ch" style="width:28px;height:20px"></div><div class="ch" style="width:22px;height:16px"></div>
+      <div class="ch" style="width:26px;height:22px"></div><div class="ch" style="width:20px;height:14px"></div>
+    </div>
+    <div class="stage-fade"></div>
+  </div>
+  <div class="hero">
+    <div class="htitle">TAK<b>KAR</b></div>
+    <div class="htitle" style="font-size:16px;letter-spacing:4px;color:var(--t2);margin-bottom:12px;">ENGLISH BATTLE</div>
+    <div class="hsub">You pick the questions. Your opponent answers.<br/>Then they pick for you. Best score wins.</div>
+  </div>
+  <div class="card">
+    <input class="inp" id="name-inp" placeholder="Your name..." maxlength="14" autocomplete="off"/>
+    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--t3);margin-bottom:9px;">Choose difficulty</div>
+    <div class="lrow">
+      <button class="lb" id="lv-b" onclick="pickLv('beginner')"><span class="lb-ic">🟢</span>Basic<div class="lb-s">Beginner</div></button>
+      <button class="lb" id="lv-i" onclick="pickLv('intermediate')"><span class="lb-ic">🟡</span>Medium<div class="lb-s">Intermediate</div></button>
+      <button class="lb" id="lv-a" onclick="pickLv('advanced')"><span class="lb-ic">🔴</span>Hard<div class="lb-s">Advanced</div></button>
+    </div>
+    <button class="btn btnr" id="start-btn" onclick="createRoom()" disabled>Create Room →</button>
+  </div>
+</div>
+
+<!-- WAITING FOR P2 -->
+<div id="s-wait" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">PLAYER 1</div></div>
+  <div style="padding:14px 0 0;">
+    <div class="code-box">
+      <div class="code-lbl">Share this code with Player 2</div>
+      <div class="code-num" id="room-code">------</div>
+      <div class="code-sub">They open p2.html and enter this code</div>
+    </div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;font-size:14px;color:var(--t2);">
+      <span class="wdot"></span><span class="wdot"></span><span class="wdot"></span>
+      <span id="wait-txt">Waiting for Player 2...</span>
+    </div>
+    <div class="joined-msg" id="joined-msg">✓ Player 2 joined! Starting...</div>
+  </div>
+</div>
+
+<!-- PICK QUESTION (P1's turn to choose) -->
+<div id="s-pick" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">PLAYER 1</div></div>
+  <div class="sbar">
+    <div class="spl hi" id="sp-me"><div class="sav" style="background:var(--med);" id="av1">P1</div><div><div class="sname" id="sn1">You</div><div class="swon" id="sw1">0 won</div></div><div class="spts" id="ss1">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl" id="sp-opp"><div class="sav" style="background:var(--oppd);" id="av2">P2</div><div><div class="sname" id="sn2">Opp</div><div class="swon" id="sw2">0 won</div></div><div class="spts" id="ss2">0</div></div>
+  </div>
+  <div class="rnd" id="rnd-lbl">Round 1 of 6</div>
+  <div class="pick-header">
+    <div class="ph-title">🎯 PICK A QUESTION FOR YOUR OPPONENT</div>
+    <div class="ph-sub" id="pick-sub">Choose wisely — they have to answer it!</div>
+  </div>
+  <div class="q-list" id="q-list"></div>
+</div>
+
+<!-- WAITING FOR P2 TO ANSWER -->
+<div id="s-wait-ans" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">WAITING</div></div>
+  <div class="sbar">
+    <div class="spl hi" id="sp-me2"><div class="sav" style="background:var(--med);" id="av1b">P1</div><div><div class="sname" id="sn1b">You</div><div class="swon" id="sw1b">0 won</div></div><div class="spts" id="ss1b">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl" id="sp-opp2"><div class="sav" style="background:var(--oppd);" id="av2b">P2</div><div><div class="sname" id="sn2b">Opp</div><div class="swon" id="sw2b">0 won</div></div><div class="spts" id="ss2b">0</div></div>
+  </div>
+  <div class="rnd" id="rnd-lbl2">Round 1 of 6</div>
+  <div style="padding:14px 16px;">
+    <div class="wait-card">
+      <div class="wc-title" id="wc-oppname">Opponent</div>
+      <div style="font-size:12px;color:var(--t3);margin-bottom:8px;letter-spacing:1px;text-transform:uppercase;">is answering your question</div>
+      <div class="wc-q" id="wc-q">"..."</div>
+      <div class="wc-dots"><div class="wd"></div><div class="wd"></div><div class="wd"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ROUND RESULT -->
+<div id="s-rresult" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">ROUND RESULT</div></div>
+  <div class="sbar">
+    <div class="spl hi" id="sp-me3"><div class="sav" style="background:var(--med);" id="av1c">P1</div><div><div class="sname" id="sn1c">You</div><div class="swon" id="sw1c">0 won</div></div><div class="spts" id="ss1c">0</div></div>
+    <div class="svs">VS</div>
+    <div class="spl" id="sp-opp3"><div class="sav" style="background:var(--oppd);" id="av2c">P2</div><div><div class="sname" id="sn2c">Opp</div><div class="swon" id="sw2c">0 won</div></div><div class="spts" id="ss2c">0</div></div>
+  </div>
+  <div style="padding:14px 0 0;">
+    <div class="rr-card anim" id="rr-card"></div>
+    <div style="padding:0 16px;" id="rr-next-area"></div>
+  </div>
+</div>
+
+<!-- FINAL RESULT -->
+<div id="s-final" class="scr">
+  <div class="topbar"><div class="logo">TAK<b>KAR</b></div><div class="badge">FINAL</div></div>
+  <div class="fin-card" id="fin-card">
+    <div class="fin-res" id="fin-res">RESULT</div>
+    <div class="fin-sc" id="fin-sc">0</div>
+    <div class="fin-sub" id="fin-sub">points</div>
+  </div>
+  <div class="cmp">
+    <div class="cmp-b" id="cmp1"><div class="cmp-name" id="cn1">P1</div><div class="cmp-pts" id="cs1">0</div><div class="cmp-det" id="cd1">0/6</div><div class="dots" id="cdots1"></div></div>
+    <div class="cmp-b" id="cmp2"><div class="cmp-name" id="cn2">P2</div><div class="cmp-pts" id="cs2">0</div><div class="cmp-det" id="cd2">0/6</div><div class="dots" id="cdots2"></div></div>
+  </div>
+  <button class="share-btn" onclick="doShare()">📤 Share Result</button>
+  <button class="again-btn" onclick="location.reload()">Play Again</button>
+</div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script>
+// ── Firebase ──────────────────────────────────────────────────────────────────
+const FB = {
+  apiKey:"AIzaSyDUgPWK9rpcjQx5i-68FBL3VNlofbCITw8",
+  authDomain:"engraji-f6a36.firebaseapp.com",
+  databaseURL:"https://engraji-f6a36-default-rtdb.firebaseio.com",
+  projectId:"engraji-f6a36",
+  storageBucket:"engraji-f6a36.firebasestorage.app",
+  messagingSenderId:"564439682700",
+  appId:"1:564439682700:web:1d8ceee2951239189035a9"
+};
+firebase.initializeApp(FB);
+const db = firebase.database();
+
+// ── Questions ─────────────────────────────────────────────────────────────────
+const QS = {
+  beginner:[
+    {id:'b1',type:'mcq',q:'She ___ to school every day.',opts:['go','goes','going','gone'],ans:1,ex:'"She" is 3rd person singular — always "goes".'},
+    {id:'b2',type:'mcq',q:'I ___ seen that movie before.',opts:['have','has','had','am'],ans:0,ex:'"I" + present perfect = "have seen".'},
+    {id:'b3',type:'fill',q:'They ___ playing cricket right now.',ans:['are'],ex:'Present continuous with "they" = "are playing".'},
+    {id:'b4',type:'spot',q:'"He don\'t like mangoes."',correct:'He doesn\'t like mangoes.',ex:'With he/she/it use "doesn\'t" not "don\'t".'},
+    {id:'b5',type:'meaning',q:'What does "enormous" mean?',opts:['Very small','Very large','Very fast','Very old'],ans:1,ex:'"Enormous" = extremely large in size.'},
+    {id:'b6',type:'fill',q:'I wake up ___ 6 o\'clock every morning.',ans:['at'],ex:'Use "at" for specific clock times.'},
+    {id:'b7',type:'spot',q:'"Yesterday I go to the market."',correct:'Yesterday I went to the market.',ex:'"Yesterday" = past tense. "go" → "went".'},
+    {id:'b8',type:'mcq',q:'There ___ a dog in the garden.',opts:['are','is','were','be'],ans:1,ex:'"There IS" for singular nouns.'},
+    {id:'b9',type:'meaning',q:'What does "brave" mean?',opts:['Afraid','Courageous','Tired','Angry'],ans:1,ex:'"Brave" = showing courage, fearless.'},
+    {id:'b10',type:'spot',q:'"She is more taller than her sister."',correct:'She is taller than her sister.',ex:'Never use "more" with "-er" comparatives.'},
+    {id:'b11',type:'fill',q:'We ___ friends since childhood.',ans:['have been'],ex:'"Since" + present perfect = "have been".'},
+    {id:'b12',type:'mcq',q:'She ___ to school yesterday.',opts:['go','goes','went','gone'],ans:2,ex:'Past tense of "go" = "went".'},
+  ],
+  intermediate:[
+    {id:'i1',type:'spot',q:'"If I would have money, I will buy a car."',correct:'If I had money, I would buy a car.',ex:'Second conditional: "If + past simple, would + base verb."'},
+    {id:'i2',type:'mcq',q:'The report ___ submitted by 5 PM yesterday.',opts:['was','were','had','is'],ans:0,ex:'Passive past simple, singular = "was submitted".'},
+    {id:'i3',type:'fill',q:'She has been working here ___ 2019.',ans:['since'],ex:'"Since" = specific point. "For" = duration.'},
+    {id:'i4',type:'meaning',q:'What does "ambiguous" mean?',opts:['Very clear','Open to two meanings','Completely wrong','Very brief'],ans:1,ex:'"Ambiguous" = having more than one possible meaning.'},
+    {id:'i5',type:'mcq',q:'"___ you finish, call me immediately."',opts:['Until','Once','Unless','Despite'],ans:1,ex:'"Once" = as soon as / after completing.'},
+    {id:'i6',type:'spot',q:'"He suggested that she goes to the doctor."',correct:'He suggested that she go to the doctor.',ex:'After "suggest" use subjunctive: "go" not "goes".'},
+    {id:'i7',type:'fill',q:'By the time I arrived, they ___ already left.',ans:['had'],ex:'Past perfect: "had left" before I "arrived".'},
+    {id:'i8',type:'meaning',q:'What does "inevitable" mean?',opts:['Avoidable','Certain to happen','Very surprising','Completely unfair'],ans:1,ex:'"Inevitable" = impossible to prevent or avoid.'},
+    {id:'i9',type:'spot',q:'"The team are playing good today."',correct:'The team is playing well today.',ex:'"Team" = singular → "is". Use "well" not "good".'},
+    {id:'i10',type:'mcq',q:'"She is used to ___ early every morning."',opts:['wake','waking','woke','woken'],ans:1,ex:'"Be used to" always takes gerund (verb+ing).'},
+    {id:'i11',type:'fill',q:'I wish I ___ speak French fluently.',ans:['could'],ex:'"Wish + could" = desire for an ability you lack.'},
+    {id:'i12',type:'mcq',q:'"Neither the players nor the coach ___ satisfied."',opts:['was','were','are','is'],ans:0,ex:'"Neither...nor" — verb agrees with closer noun. "Coach" (singular) = "was".'},
+  ],
+  advanced:[
+    {id:'a1',type:'meaning',q:'What does "perfidious" mean?',opts:['Very loyal','Deceitful & treacherous','Extremely brave','Overly cautious'],ans:1,ex:'"Perfidious" = deliberately faithless; guilty of betrayal.'},
+    {id:'a2',type:'spot',q:'"The data shows that less people are reading."',correct:'The data show that fewer people are reading.',ex:'"Data" is plural → "show". "Fewer" for countable nouns.'},
+    {id:'a3',type:'fill',q:'No sooner ___ he arrived than chaos began.',ans:['had'],ex:'"No sooner had + subject + V3" — inverted structure.'},
+    {id:'a4',type:'mcq',q:'"She spoke with such ___ that everyone was persuaded."',opts:['conviction','convincing','convinced','convince'],ans:0,ex:'"Such + noun" — "conviction" (strong belief) is the noun.'},
+    {id:'a5',type:'spot',q:'"Between you and I, this will fail."',correct:'Between you and me, this will fail.',ex:'"Between" takes object pronoun "me" not "I".'},
+    {id:'a6',type:'meaning',q:'What does "sycophantic" mean?',opts:['Overly critical','Excessively flattering','Deeply philosophical','Reluctant to act'],ans:1,ex:'"Sycophantic" = fawning, flattering to gain favour.'},
+    {id:'a7',type:'fill',q:'Had I known, I ___ taken a different route.',ans:['would have',"would've"],ex:'Third conditional inverted: "Had I known...would have + V3".'},
+    {id:'a8',type:'spot',q:'"Irregardless of the outcome, we proceed."',correct:'Regardless of the outcome, we proceed.',ex:'"Irregardless" is incorrect. The word is "regardless".'},
+    {id:'a9',type:'meaning',q:'What does "tendentious" mean?',opts:['Neutral and balanced','Promoting a biased view','Extremely careful','Visually striking'],ans:1,ex:'"Tendentious" = promoting a particular cause, not objective.'},
+    {id:'a10',type:'fill',q:'The speech was ___ with contradictions.',ans:['riddled','laced'],ex:'"Riddled with" = full of (negatives).'},
+    {id:'a11',type:'spot',q:'"This is the most unique proposal I\'ve seen."',correct:'This is a unique proposal.',ex:'"Unique" is absolute — cannot say "most unique".'},
+    {id:'a12',type:'mcq',q:'"She spoke with such ___ that everyone was moved."',opts:['passion','passionate','passionately','passioned'],ans:0,ex:'"Such + noun": "passion" is the noun needed here.'},
+  ]
+};
+
+// ── State ─────────────────────────────────────────────────────────────────────
+let myName='', oppName='', level=null, roomCode=null, roomRef=null;
+let allQs=[], availableQs=[], usedQIds=[];
+let round=0, totalRounds=6;
+let myScore=0, oppScore=0, myWon=0, oppWon=0;
+let myResults=[], oppResults=[];
+let currentQ=null;
+
+// ── Setup ─────────────────────────────────────────────────────────────────────
+document.getElementById('name-inp').addEventListener('input', chk);
+function chk(){ document.getElementById('start-btn').disabled=!(document.getElementById('name-inp').value.trim()&&level); }
+function pickLv(l){ level=l; document.querySelectorAll('.lb').forEach(b=>b.classList.remove('on')); document.getElementById('lv-'+l[0]).classList.add('on'); chk(); }
+
+function createRoom(){
+  myName = document.getElementById('name-inp').value.trim()||'Player 1';
+  roomCode = Math.floor(100000+Math.random()*900000).toString();
+  allQs = shuffle([...QS[level]]);
+  availableQs = [...allQs];
+
+  roomRef = db.ref('takkar/'+roomCode);
+  roomRef.set({
+    level, status:'waiting',
+    p1:{name:myName,score:0,won:0},
+    p2:{name:'',score:0,won:0},
+    round:0, currentQ:null,
+    p2answer:null,
+    createdAt:Date.now()
+  });
+
+  el('room-code').textContent = roomCode;
+  show('s-wait');
+
+  roomRef.child('p2/name').on('value', snap=>{
+    if(snap.val()){
+      oppName=snap.val();
+      el('joined-msg').style.display='block';
+      el('wait-txt').textContent=oppName+' joined!';
+      setTimeout(()=>{ roomRef.child('status').set('playing'); startPickPhase(); }, 1500);
+    }
+  });
+}
+
+// ── Game flow ─────────────────────────────────────────────────────────────────
+function startPickPhase(){
+  round++;
+  updateScoreAll();
+  el('rnd-lbl').textContent='Round '+round+' of '+totalRounds;
+  el('pick-sub').textContent='Pick a question for '+oppName;
+  renderQList();
+  show('s-pick');
+}
+
+function renderQList(){
+  const list=el('q-list'); list.innerHTML='';
+  availableQs.forEach(q=>{
+    const used=usedQIds.includes(q.id);
+    const div=document.createElement('div');
+    div.className='qi anim'+(used?' qi-used':'');
+    div.innerHTML=`<div class="qi-type ${q.type}">${typeLabel(q.type)}</div><div class="qi-q">${q.q}</div><div class="qi-arrow">→</div>`;
+    if(!used) div.onclick=()=>pickQuestion(q);
+    list.appendChild(div);
+  });
+}
+
+function pickQuestion(q){
+  currentQ=q;
+  usedQIds.push(q.id);
+  // Send to Firebase for P2
+  roomRef.child('currentQ').set({...q, round});
+  roomRef.child('p2answer').set(null);
+  roomRef.child('status').set('p2answering');
+
+  el('wc-oppname').textContent=oppName;
+  el('wc-q').textContent='"'+q.q+'"';
+  el('rnd-lbl2').textContent='Round '+round+' of '+totalRounds;
+  updateScoreAll();
+  show('s-wait-ans');
+
+  // Listen for P2's answer
+  roomRef.child('p2answer').on('value', snap=>{
+    const ans=snap.val();
+    if(ans!==null && ans!==undefined){
+      roomRef.child('p2answer').off();
+      showRoundResult(ans);
+    }
+  });
+}
+
+function showRoundResult(p2ans){
+  const q=currentQ;
+  const ok=checkAnswer(q, p2ans);
+  if(ok){ oppScore+=10; oppWon++; }
+  oppResults.push({correct:ok, val:p2ans});
+  myResults.push({correct:false, val:'(picked)'});
+
+  roomRef.child('p2/score').set(oppScore);
+  roomRef.child('p2/won').set(oppWon);
+  updateScoreAll();
+
+  const ans = q.opts ? q.opts[q.ans] : (q.correct||(q.ans||[]).join('/'));
+  const card=el('rr-card');
+  card.innerHTML=`
+    <div class="rr-title">⚔️ ROUND ${round} RESULT</div>
+    <div class="rr-row">
+      <div class="rr-p ok">
+        <div class="rr-pname">${myName} (Picked)</div>
+        <div class="rr-pans">+0 pts</div>
+        <div class="rr-pres">You chose this question</div>
+      </div>
+      <div class="rr-p ${ok?'ok':'bad'}">
+        <div class="rr-pname">${oppName}</div>
+        <div class="rr-pans">${p2ans}</div>
+        <div class="rr-pres">${ok?'✓ Correct +10':'✗ Wrong'}</div>
+      </div>
+    </div>
+    <div class="rr-correct">Correct answer: <strong style="color:var(--text)">${ans}</strong><br/><span style="color:var(--t3);font-size:11px;">${q.ex}</span></div>`;
+
+  const na=el('rr-next-area');
+  const isLast=round>=totalRounds;
+
+  if(isLast){
+    na.innerHTML=`<button class="btn btnr" style="margin-top:8px;" onclick="waitForP2ToFinish()">See Final Result →</button>`;
+  } else {
+    na.innerHTML=`<button class="btn btnr" style="margin-top:8px;" onclick="waitForP2Turn()">P2 Picks Next →</button>`;
+  }
+
+  el('rnd-lbl').textContent='Round '+round+' of '+totalRounds;
+  updateScoreAll();
+  show('s-rresult');
+}
+
+function waitForP2Turn(){
+  // Now P2 picks a question for P1
+  roomRef.child('status').set('p2picking');
+  show('s-wait-ans');
+  el('wc-oppname').textContent=oppName;
+  el('wc-q').textContent='Waiting for '+oppName+' to pick your question...';
+  el('wc-dots').style.display='flex';
+
+  // Listen for P2 to pick a question and P1 answer needed
+  roomRef.child('status').on('value', snap=>{
+    if(snap.val()==='p1answering'){
+      roomRef.child('status').off();
+      roomRef.child('currentQ').once('value').then(s=>{
+        currentQ=s.val();
+        showP1AnswerScreen(currentQ);
+      });
+    }
+  });
+}
+
+function showP1AnswerScreen(q){
+  // Reuse pick screen to show P1 answering
+  el('rnd-lbl').textContent='Round '+round+' of '+totalRounds;
+  el('pick-sub').textContent='Answer this question from '+oppName+'!';
+  const list=el('q-list'); list.innerHTML='';
+
+  const card=document.createElement('div');
+  card.className='qi anim';
+  card.style.cursor='default';
+  card.innerHTML=`<div class="qi-type ${q.type}">${typeLabel(q.type)}</div><div class="qi-q">${q.q}</div>`;
+  list.appendChild(card);
+
+  const ansDiv=document.createElement('div');
+  ansDiv.style.marginTop='12px';
+
+  if(q.type==='mcq'||q.type==='meaning'){
+    const grid=document.createElement('div');
+    grid.style.cssText='display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;';
+    q.opts.forEach((o,i)=>{
+      const b=document.createElement('button');
+      b.style.cssText='padding:12px;border-radius:9px;border:1px solid rgba(255,255,255,0.08);background:var(--s2);color:var(--text);font-family:Rajdhani,sans-serif;font-size:15px;font-weight:500;cursor:pointer;transition:all 0.15s;';
+      b.textContent=o;
+      b.onmouseenter=()=>b.style.borderColor='var(--me)';
+      b.onmouseleave=()=>b.style.borderColor='rgba(255,255,255,0.08)';
+      b.onclick=()=>submitP1Answer(String(i), q);
+      grid.appendChild(b);
+    });
+    ansDiv.appendChild(grid);
+  } else {
+    const ph=q.type==='spot'?'Type the corrected sentence...':'Type the missing word(s)...';
+    ansDiv.innerHTML=`<input class="inp" id="p1-ans-inp" placeholder="${ph}" autocomplete="off" style="margin-bottom:10px;"/><button class="btn btnr" onclick="submitP1Typed()">Submit Answer</button>`;
+    setTimeout(()=>{ const i=el('p1-ans-inp'); if(i) i.addEventListener('keydown',e=>{ if(e.key==='Enter') submitP1Typed(); }); },100);
+  }
+  list.appendChild(ansDiv);
+  show('s-pick');
+}
+
+function submitP1Typed(){
+  const inp=el('p1-ans-inp');
+  if(!inp||!inp.value.trim()) return;
+  submitP1Answer(inp.value.trim(), currentQ);
+}
+
+function submitP1Answer(val, q){
+  const ok=checkAnswer(q, val);
+  const ansDisplay=q.opts?q.opts[Number(val)]||val:String(val);
+  if(ok){ myScore+=10; myWon++; }
+  myResults.push({correct:ok, val:ansDisplay});
+
+  roomRef.child('p1answer').set({val:ansDisplay, correct:ok});
+  roomRef.child('p1/score').set(myScore);
+  roomRef.child('p1/won').set(myWon);
+
+  // Show P1's own feedback then round result
+  const ans=q.opts?q.opts[q.ans]:(q.correct||(q.ans||[]).join('/'));
+  const card=el('rr-card');
+  card.innerHTML=`
+    <div class="rr-title">⚔️ ROUND ${round} RESULT</div>
+    <div class="rr-row">
+      <div class="rr-p ${ok?'ok':'bad'}">
+        <div class="rr-pname">${myName} (You)</div>
+        <div class="rr-pans">${ansDisplay}</div>
+        <div class="rr-pres">${ok?'✓ Correct +10':'✗ Wrong'}</div>
+      </div>
+      <div class="rr-p ok">
+        <div class="rr-pname">${oppName} (Picked)</div>
+        <div class="rr-pans">+0 pts</div>
+        <div class="rr-pres">They chose this question</div>
+      </div>
+    </div>
+    <div class="rr-correct">Correct: <strong style="color:var(--text)">${ans}</strong><br/><span style="color:var(--t3);font-size:11px;">${q.ex}</span></div>`;
+
+  updateScoreAll();
+  const na=el('rr-next-area');
+  const isLast=round>=totalRounds;
+  if(isLast){
+    na.innerHTML=`<button class="btn btnr" style="margin-top:8px;" onclick="waitForP2ToFinish()">See Final Result →</button>`;
+    roomRef.child('status').set('p1done');
+  } else {
+    na.innerHTML=`<button class="btn btnr" style="margin-top:8px;" onclick="startPickPhase()">Pick Next Question →</button>`;
+    roomRef.child('status').set('p1picking');
+  }
+  show('s-rresult');
+}
+
+function waitForP2ToFinish(){
+  roomRef.child('status').set('p1readyfinal');
+  // Wait for both to be ready
+  roomRef.child('status').on('value', snap=>{
+    if(snap.val()==='gameover'){
+      roomRef.child('status').off();
+      showFinal();
+    }
+  });
+  // If P2 also ready
+  roomRef.child('p2readyfinal').on('value', snap=>{
+    if(snap.val()===true){
+      roomRef.child('status').set('gameover');
+      showFinal();
+    }
+  });
+  el('rnd-lbl2').textContent='Game Over';
+  el('wc-oppname').textContent='Finalising...';
+  el('wc-q').textContent='Waiting for final scores...';
+  show('s-wait-ans');
+  // If already done just show final
+  setTimeout(showFinal, 2000);
+}
+
+function showFinal(){
+  const iWon=myScore>oppScore, tied=myScore===oppScore;
+  const fc=el('fin-card');
+  if(tied){ fc.style.borderColor='var(--gold)'; el('fin-res').textContent="IT'S A TIE!"; el('fin-res').style.color='var(--g2)'; }
+  else if(iWon){ fc.style.borderColor='var(--green)'; el('fin-res').textContent='YOU WIN! 🏆'; el('fin-res').style.color='var(--green)'; }
+  else { fc.style.borderColor='var(--me)'; el('fin-res').textContent='YOU LOSE'; el('fin-res').style.color='var(--mel)'; }
+
+  el('fin-sc').textContent=myScore;
+  el('fin-sub').textContent='points · '+myWon+'/'+totalRounds+' correct';
+
+  el('cn1').textContent=myName; el('cs1').textContent=myScore; el('cd1').textContent=myWon+'/'+totalRounds;
+  el('cn2').textContent=oppName; el('cs2').textContent=oppScore; el('cd2').textContent=oppWon+'/'+totalRounds;
+  if(iWon) el('cmp1').classList.add('win');
+  else if(!tied) el('cmp2').classList.add('win');
+
+  myResults.forEach(r=>{ const d=document.createElement('div'); d.className='dt '+(r.correct?'w':r.val==='(picked)'?'s':'l'); d.textContent=r.correct?'W':r.val==='(picked)'?'P':'L'; el('cdots1').appendChild(d); });
+  show('s-final');
+}
+
+function doShare(){
+  const res=myScore>oppScore?'I WON 🏆':myScore===oppScore?"Tied!":"I lost";
+  const dots=myResults.map(r=>r.correct?'🟢':r.val==='(picked)'?'🔵':'🔴').join('');
+  const txt=`⚔️ Takkar — English Battle\n\n${myName}: ${myScore}pts\n${oppName}: ${oppScore}pts\n${res}\n${dots}\n\nPlay at engraji.com`;
+  navigator.clipboard.writeText(txt).catch(()=>{});
+  showToast('Copied! Share on WhatsApp ✓');
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function checkAnswer(q,val){
+  if(val===null||val===undefined||val==='') return false;
+  if(q.type==='mcq'||q.type==='meaning') return Number(val)===q.ans;
+  if(q.type==='fill'){ const v=String(val).trim().toLowerCase(); return q.ans.some(a=>v===a.toLowerCase()||v.includes(a.toLowerCase())); }
+  if(q.type==='spot'){ const v=String(val).trim().toLowerCase(),k=q.correct.toLowerCase(); const s=v.split(' '),t=k.split(' '); return v===k||s.filter(w=>t.includes(w)).length/Math.max(s.length,t.length)>0.75; }
+  return false;
+}
+function typeLabel(t){ return {mcq:'Choose',fill:'Fill Blank',spot:'Spot Error',meaning:'Meaning'}[t]||t; }
+function shuffle(a){ const b=[...a]; for(let i=b.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]]; } return b; }
+function el(id){ return document.getElementById(id); }
+function show(id){ document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on')); el(id).classList.add('on'); window.scrollTo(0,0); }
+function showToast(msg){ const t=el('toast'); t.textContent=msg; t.style.display='block'; t.style.opacity='1'; setTimeout(()=>{ t.style.opacity='0'; setTimeout(()=>t.style.display='none',400); },2500); }
+function updateScoreAll(){
+  ['','b','c'].forEach(sfx=>{
+    if(el('sn1'+sfx)) el('sn1'+sfx).textContent=myName;
+    if(el('sn2'+sfx)) el('sn2'+sfx).textContent=oppName||'Opponent';
+    if(el('ss1'+sfx)) el('ss1'+sfx).textContent=myScore;
+    if(el('ss2'+sfx)) el('ss2'+sfx).textContent=oppScore;
+    if(el('sw1'+sfx)) el('sw1'+sfx).textContent=myWon+' won';
+    if(el('sw2'+sfx)) el('sw2'+sfx).textContent=oppWon+' won';
+    if(el('av1'+sfx)) el('av1'+sfx).textContent=myName[0]?.toUpperCase()||'P';
+    if(el('av2'+sfx)) el('av2'+sfx).textContent=oppName[0]?.toUpperCase()||'O';
+  });
+}
+</script>
+</body>
+</html>
