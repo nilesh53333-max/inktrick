@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ROHAN & NEHA — FeelTwo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #0c0b09; font-family: Georgia, serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 16px 50px; color: #f0e8d0; cursor: pointer; }
+.brand { font-size: 1.4rem; letter-spacing: 0.5em; color: #c8a84a; text-transform: uppercase; margin-bottom: 4px; }
+.divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, #c8a84a, transparent); margin: 6px auto 4px; }
+.tagline { font-style: italic; font-size: 0.75rem; color: #6a5a3a; margin-bottom: 30px; }
+.card { width: 100%; max-width: 440px; border: 1px solid #2a2518; border-radius: 4px; overflow: hidden; }
+.card-header { background: #131108; padding: 10px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2518; }
+.name-display { font-size: 0.9rem; letter-spacing: 0.4em; color: #c8a84a; line-height: 1.7; }
+.mono-label { font-size: 0.58rem; color: #6a5a3a; font-style: italic; }
+.svg-wrap { background: #f5f0e8; padding: 20px; }
+svg#monogram { width: 100%; display: block; }
+.stroke { fill: none; stroke: #1a1208; stroke-width: 4; stroke-linecap: round; stroke-linejoin: round; opacity: 1; transition: stroke 0.3s, stroke-width 0.25s; vector-effect: non-scaling-stroke; }
+.stroke.active { stroke: #c8a84a !important; stroke-width: 6; opacity: 1; }
+.wm { font-family: Georgia, serif; font-size: 8px; font-style: italic; fill: #1a1208; letter-spacing: 3px; opacity: 0.15; }
+.controls { background: #131108; padding: 16px; border-top: 1px solid #2a2518; }
+.tap-label { font-size: 0.5rem; letter-spacing: 0.35em; color: #6a5a3a; text-transform: uppercase; text-align: center; margin-bottom: 12px; }
+.name-tag { font-size: 0.45rem; letter-spacing: 0.3em; color: #6a5a3a; text-transform: uppercase; text-align: center; margin-bottom: 6px; }
+.letter-buttons { display: flex; gap: 5px; justify-content: center; margin-bottom: 4px; }
+.letter-btn { width: 48px; height: 48px; border: 1.5px solid #2a2518; background: rgba(255,255,255,0.03); color: #6a5a3a; font-family: Georgia, serif; font-size: 1.2rem; border-radius: 3px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.letter-btn.active { background: rgba(200,168,74,0.15); border-color: #c8a84a; color: #c8a84a; font-weight: bold; }
+.sep { width: 100%; height: 1px; background: #2a2518; margin: 10px 0; }
+.action-buttons { display: flex; gap: 8px; margin-top: 10px; }
+.action-btn { flex: 1; padding: 12px; background: none; font-family: Georgia, serif; font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; border-radius: 2px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.reveal-btn { border: 1px solid rgba(200,168,74,0.4); color: #c8a84a; }
+.hide-btn { border: 1px solid #2a2518; color: #6a5a3a; }
+.fusion-panel { padding: 10px 18px; border-top: 1px solid #2a2518; background: rgba(176,48,24,0.04); }
+.fusion-row { font-size: 0.68rem; color: #c8a84a; line-height: 2.2; }
+.footer { margin-top: 24px; font-size: 0.65rem; color: #3a3020; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="brand">FeelTwo</div>
+<div class="divider"></div>
+<p class="tagline">couple monogram</p>
+
+<div class="card">
+  <div class="card-header">
+    <div class="name-display"><div>ROHAN</div><div>NEHA</div></div>
+    <div class="mono-label">Monogram</div>
+  </div>
+
+  <div class="svg-wrap">
+    <svg id="monogram" viewBox="90 115 210 235" xmlns="http://www.w3.org/2000/svg">
+
+      <!-- path5: O left arc (from your rohan-neha-new.svg) -->
+      <path id="s5" class="stroke" data-letters="O"
+        d="m 198.73788,131.76713 c -44.35725,26.81729 -88.7145,53.63458 -88.78653,81.90176 -0.072,28.26717 44.13937,57.98304 88.35166,87.69949"
+        transform="matrix(1.0220178,0,0,0.99480078,-4.2574525,0.25610003)"/>
+
+      <!-- path10: O right arc + R bump -->
+      <path id="s10" class="stroke" data-letters="O,R"
+        d="m 198.73788,131.76713 c -44.35725,26.81729 -88.7145,53.63458 -88.78653,81.90176 -0.072,28.26717 44.13937,57.98304 88.35166,87.69949"
+        transform="matrix(-1.0220178,0,0,0.99480078,400.26096,0.69097502)"/>
+
+      <!-- path1: center vertical top — R -->
+      <path id="s1" class="stroke" data-letters="R"
+        d="m 197.43326,133.07175 c 0.14496,16.96013 0.28991,33.92026 0.43487,50.88038"/>
+
+      <!-- path3: center vertical mid — R, H, E -->
+      <path id="s3" class="stroke" data-letters="R,H_ROHAN,H_NEHA,E"
+        d="m 197.86813,184.82188 c 0.28992,18.98954 0.57983,37.97909 0.86975,56.96863"/>
+
+      <!-- path2: center vertical lower — R -->
+      <path id="s2" class="stroke" data-letters="R"
+        d="m 198.73788,242.66026 c 0,18.69962 0,37.39924 0,56.09888"/>
+
+      <!-- path12: center vertical bottom — R -->
+      <path id="s12" class="stroke" data-letters="R"
+        d="m 198.73788,300.06377 c 0,10.14706 0,20.29415 0,30.44124"/>
+
+      <!-- path29: R kick diagonal -->
+      <path id="s29" class="stroke" data-letters="R"
+        d="m 197.43326,298.32427 c 29.42654,10.14708 58.85308,20.29415 88.27962,30.44123"
+        transform="translate(-1.6817917,0.09429165)"/>
+
+      <!-- path38: top bar RIGHT — H and E share -->
+      <path id="s38" class="stroke" data-letters="H_ROHAN,H_NEHA,E"
+        d="m 198.30301,184.82188 c 21.88871,-0.14496 43.77742,-0.28991 65.66612,-0.43487"
+        transform="translate(-0.52916667,0.52916667)"/>
+
+      <!-- path40: top bar LEFT — H and N share -->
+      <path id="s40" class="stroke" data-letters="H_ROHAN,H_NEHA,N_ROHAN,N_NEHA"
+        d="m 197.86813,186.12651 c -21.88871,0 -43.77742,0 -65.66612,0"
+        transform="translate(1.0583333,-1.0583333)"/>
+
+      <!-- path39: bottom bar RIGHT — H and E share -->
+      <path id="s39" class="stroke" data-letters="H_ROHAN,H_NEHA,E"
+        d="m 199.17276,242.66026 c 21.74375,-0.14496 43.4875,-0.28992 65.23125,-0.43488"
+        transform="translate(-0.52916667)"/>
+
+      <!-- path41: bottom bar LEFT — H and N share -->
+      <path id="s41" class="stroke" data-letters="H_ROHAN,H_NEHA,N_ROHAN,N_NEHA"
+        d="m 198.73788,242.66026 c -22.17862,0.14496 -44.35725,0.28991 -66.53587,0.43487"/>
+
+      <!-- path15: E middle bar -->
+      <path id="s15" class="stroke" data-letters="E"
+        d="m 199.17276,213.52363 c 12.90129,-0.14496 25.80258,-0.28991 38.70387,-0.43487"/>
+
+      <!-- path35: N+A short diagonal -->
+      <path id="s35" class="stroke" data-letters="N_ROHAN,N_NEHA,A_ROHAN,A_NEHA"
+        d="m 153.94575,221.78626 c 4.2038,-4.20379 8.40759,-8.40759 12.61138,-12.61138"/>
+
+      <!-- A vertical — single path, shared by both A buttons -->
+      <path id="s33" class="stroke" data-letters="A_ROHAN,A_NEHA"
+        d="m 146.55288,200.04251 c 0,10.437 0,20.874 0,31.311"
+        transform="translate(-2.1743751,3.0441251)"/>
+
+      <!-- A diagonal — single path, shared by both A buttons -->
+      <path id="s33-4" class="stroke" data-letters="A_ROHAN,A_NEHA"
+        d="m 146.55288,200.04251 c 0,10.437 0,20.874 0,31.311"
+        transform="matrix(0,-1,-1,0,379.75955,346.96071)"/>
+
+      <text class="wm" x="198" y="348" text-anchor="middle">FEELTWO.COM</text>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <div class="tap-label">Tap each letter to reveal it</div>
+
+    <div class="name-tag">ROHAN</div>
+    <div class="letter-buttons">
+      <div class="letter-btn" id="btn-R"       onclick="tap('R')">R</div>
+      <div class="letter-btn" id="btn-O"       onclick="tap('O')">O</div>
+      <div class="letter-btn" id="btn-H-rohan" onclick="tap('H_ROHAN')">H</div>
+      <div class="letter-btn" id="btn-A-rohan" onclick="tap('A_ROHAN')">A</div>
+      <div class="letter-btn" id="btn-N-rohan" onclick="tap('N_ROHAN')">N</div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="name-tag">NEHA</div>
+    <div class="letter-buttons">
+      <div class="letter-btn" id="btn-N-neha"  onclick="tap('N_NEHA')">N</div>
+      <div class="letter-btn" id="btn-E"       onclick="tap('E')">E</div>
+      <div class="letter-btn" id="btn-H-neha"  onclick="tap('H_NEHA')">H</div>
+      <div class="letter-btn" id="btn-A-neha"  onclick="tap('A_NEHA')">A</div>
+    </div>
+
+    <div class="action-buttons">
+      <div class="action-btn reveal-btn" onclick="tapAll()">&#9711; Reveal All</div>
+      <div class="action-btn hide-btn"   onclick="tapNone()">&#10005; Hide All</div>
+    </div>
+  </div>
+
+  <div id="fusionPanel" class="fusion-panel" style="display:none"></div>
+</div>
+
+<p class="footer">feeltwo.com · the secret is in the geometry</p>
+
+<script>
+var MAP = {
+  R:       ['s10','s1','s3','s2','s12','s29'],
+  O:       ['s5','s10'],
+  H_ROHAN: ['s38','s40','s39','s41','s3'],
+  H_NEHA:  ['s38','s40','s39','s41','s3'],
+  A_ROHAN: ['s33','s33-4','s35'],
+  A_NEHA:  ['s33','s33-4','s35'],
+  N_ROHAN: ['s40','s41','s35'],
+  N_NEHA:  ['s40','s41','s35'],
+  E:       ['s38','s39','s15','s3']
+};
+
+var BTNS = {
+  R:       ['btn-R'],
+  O:       ['btn-O'],
+  H_ROHAN: ['btn-H-rohan'],
+  H_NEHA:  ['btn-H-neha'],
+  A_ROHAN: ['btn-A-rohan'],
+  A_NEHA:  ['btn-A-neha'],
+  N_ROHAN: ['btn-N-rohan'],
+  N_NEHA:  ['btn-N-neha'],
+  E:       ['btn-E']
+};
+
+var INFO = {
+  R:'R · arc + vertical + kick',
+  O:'O · eye shape',
+  H_ROHAN:'H (ROHAN)', H_NEHA:'H (NEHA)',
+  A_ROHAN:'A (ROHAN)', A_NEHA:'A (NEHA)',
+  N_ROHAN:'N (ROHAN)', N_NEHA:'N (NEHA)',
+  E:'E · right bars'
+};
+
+var active = {};
+
+function tap(l) {
+  active[l] = !active[l];
+  BTNS[l].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b){ if(active[l]) b.classList.add('active'); else b.classList.remove('active'); }
+  });
+  refresh();
+}
+
+function tapAll() {
+  Object.keys(MAP).forEach(function(l){
+    active[l] = true;
+    BTNS[l].forEach(function(id){ var b=document.getElementById(id); if(b) b.classList.add('active'); });
+  });
+  refresh();
+}
+
+function tapNone() {
+  Object.keys(MAP).forEach(function(l){
+    active[l] = false;
+    BTNS[l].forEach(function(id){ var b=document.getElementById(id); if(b) b.classList.remove('active'); });
+  });
+  refresh();
+}
+
+function refresh() {
+  document.querySelectorAll('.stroke').forEach(function(el){
+    var on = el.getAttribute('data-letters').split(',').some(function(l){ return active[l.trim()]; });
+    if(on){
+      el.classList.add('active');
+    } else {
+      el.classList.remove('active');
+    }
+  });
+  var panel = document.getElementById('fusionPanel');
+  var keys = Object.keys(active).filter(function(l){ return active[l]; });
+  if(keys.length===0){ panel.style.display='none'; return; }
+  panel.style.display='block';
+  panel.innerHTML = keys.map(function(l){ return '<div class="fusion-row">'+INFO[l]+'</div>'; }).join('');
+}
+</script>
+</body>
+</html>
