@@ -200,6 +200,7 @@ function tap(l) {
 }
 
 function tapAll() {
+  var s53=document.getElementById("s53"); if(s53){s53.classList.add("active"); document.getElementById("monogram").appendChild(s53);}
   Object.keys(MAP).forEach(function(l){
     active[l] = true;
     BTNS[l].forEach(function(id){ var b=document.getElementById(id); if(b) b.classList.add('active'); });
@@ -208,6 +209,7 @@ function tapAll() {
 }
 
 function tapNone() {
+  var s53=document.getElementById("s53"); if(s53){s53.classList.remove("active");}
   Object.keys(MAP).forEach(function(l){
     active[l] = false;
     BTNS[l].forEach(function(id){ var b=document.getElementById(id); if(b) b.classList.remove('active'); });
@@ -218,6 +220,7 @@ function tapNone() {
 function refresh() {
   var svg = document.getElementById('monogram');
   document.querySelectorAll('.stroke').forEach(function(el){
+    if(el.id === 's53') return; // s53 is managed only by tapAll/tapNone
     var on = el.getAttribute('data-letters').split(',').some(function(l){ return active[l.trim()]; });
     if(on){
       el.classList.add('active');
