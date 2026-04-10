@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>ANKIT & TANVI — FeelTwo</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+body { background: #0c0b09; font-family: Georgia, serif; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 30px 16px 50px; color: #f0e8d0; cursor: pointer; }
+.brand { font-size: 1.4rem; letter-spacing: 0.5em; color: #c8a84a; text-transform: uppercase; margin-bottom: 4px; }
+.divider { width: 200px; height: 1px; background: linear-gradient(90deg, transparent, #c8a84a, transparent); margin: 6px auto 4px; }
+.tagline { font-style: italic; font-size: 0.75rem; color: #6a5a3a; margin-bottom: 30px; }
+.card { width: 100%; max-width: 440px; border: 1px solid #2a2518; border-radius: 4px; overflow: hidden; }
+.card-header { background: #131108; padding: 10px 18px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2a2518; }
+.name-display { font-size: 0.9rem; letter-spacing: 0.4em; color: #c8a84a; line-height: 1.7; }
+.mono-label { font-size: 0.58rem; color: #6a5a3a; font-style: italic; }
+.svg-wrap { background: #f5f0e8; padding: 20px; }
+svg#monogram { width: 100%; display: block; }
+.stroke { fill: none; stroke: #1a1208; stroke-width: 2.64583; stroke-linecap: round; stroke-linejoin: round; opacity: 1; transition: stroke 0.3s, stroke-width 0.25s; vector-effect: non-scaling-stroke; }
+.stroke.active { stroke: #c8a84a !important; stroke-width: 4.5; opacity: 1; }
+.wm { font-family: Georgia, serif; font-size: 4px; font-style: italic; fill: #1a1208; letter-spacing: 1.5px; opacity: 0.15; }
+.controls { background: #131108; padding: 16px; border-top: 1px solid #2a2518; }
+.tap-label { font-size: 0.5rem; letter-spacing: 0.35em; color: #6a5a3a; text-transform: uppercase; text-align: center; margin-bottom: 12px; }
+.name-tag { font-size: 0.45rem; letter-spacing: 0.3em; color: #6a5a3a; text-transform: uppercase; text-align: center; margin-bottom: 6px; }
+.letter-buttons { display: flex; gap: 5px; justify-content: center; margin-bottom: 4px; }
+.letter-btn { width: 48px; height: 48px; border: 1.5px solid #2a2518; background: rgba(255,255,255,0.03); color: #6a5a3a; font-family: Georgia, serif; font-size: 1.2rem; border-radius: 3px; display: flex; align-items: center; justify-content: center; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.letter-btn.active { background: rgba(200,168,74,0.15); border-color: #c8a84a; color: #c8a84a; font-weight: bold; }
+.sep { width: 100%; height: 1px; background: #2a2518; margin: 10px 0; }
+.action-buttons { display: flex; gap: 8px; margin-top: 10px; }
+.action-btn { flex: 1; padding: 12px; background: none; font-family: Georgia, serif; font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; border-radius: 2px; cursor: pointer; user-select: none; -webkit-user-select: none; }
+.reveal-btn { border: 1px solid rgba(200,168,74,0.4); color: #c8a84a; }
+.hide-btn { border: 1px solid #2a2518; color: #6a5a3a; }
+.fusion-panel { padding: 10px 18px; border-top: 1px solid #2a2518; background: rgba(176,48,24,0.04); }
+.fusion-row { font-size: 0.68rem; color: #c8a84a; line-height: 2.2; }
+.footer { margin-top: 24px; font-size: 0.65rem; color: #3a3020; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="brand">FeelTwo</div>
+<div class="divider"></div>
+<p class="tagline">couple monogram</p>
+
+<div class="card">
+  <div class="card-header">
+    <div class="name-display"><div>ANKIT</div><div>TANVI</div></div>
+    <div class="mono-label">Monogram</div>
+  </div>
+
+  <div class="svg-wrap">
+    <svg id="monogram" viewBox="123 122 148 152" xmlns="http://www.w3.org/2000/svg">
+
+      <!--
+        COMPLETE PATH MAP (all 10 strokes from ankit-tanvi.svg):
+
+        s48   = top-left outer leg      → A_ANKIT, A_TANVI
+        s52   = top-right outer leg     → A_ANKIT, A_TANVI
+        s54   = horizontal crossbar     → A_ANKIT, A_TANVI, T_ANKIT, T_TANVI, I_ANKIT, I_TANVI
+        s49   = bottom-left outer leg   → V  (V left outer arm)
+        s53   = bottom-right outer leg  → V  (V right outer arm)
+        s55   = inner-left diagonal     → N_ANKIT, N_TANVI, K, V (inner)
+        s491  = inner-right diagonal    → N_ANKIT, N_TANVI, K, V (inner)
+        s56   = bottom horizontal bar   → K, I_ANKIT, I_TANVI
+        s57   = center vertical stem    → T_ANKIT, T_TANVI, I_ANKIT, I_TANVI
+
+        T_ANKIT and T_TANVI are INDEPENDENT via duplicated s54/s57 paths.
+      -->
+
+      <!-- A: top-left outer leg -->
+      <path id="s48" class="stroke" data-letters="A_ANKIT,A_TANVI"
+        d="m 198.33948,131.91882 -32.28782,66.42066 v 0"/>
+
+      <!-- A: top-right outer leg -->
+      <path id="s52" class="stroke" data-letters="A_ANKIT,A_TANVI"
+        d="m 198.64698,132.22632 32.90283,66.11316"/>
+
+      <!-- N: bottom-left outer leg (left vertical of N) -->
+      <path id="s49" class="stroke" data-letters="N_ANKIT,N_TANVI"
+        d="m 166.05166,198.33948 -33.82534,65.80566"/>
+
+      <!-- N: bottom-right outer leg (right vertical of N) — WAS MISSING -->
+      <path id="s53" class="stroke" data-letters="_none"
+        d="m 230.93481,197.1953 33.82534,66.72817"/>
+
+      <!-- N + K + V: inner-left diagonal (inner only) -->
+      <path id="s55" class="stroke" data-letters="N_ANKIT,N_TANVI,K,V"
+        d="m 165.68738,198.73788 32.83306,65.44869"/>
+
+      <!-- N + K + V: inner-right diagonal (inner only) -->
+      <path id="s491" class="stroke" data-letters="N_ANKIT,N_TANVI,K,V"
+        d="m 231.59275,198.96628 -33.82534,65.80566"/>
+
+      <!-- K + I: bottom horizontal bar -->
+      <path id="s56" class="stroke" data-letters="K,I_ANKIT,I_TANVI"
+        d="m 158.82534,264.29889 79.33579,0.46126"/>
+
+      <!-- T_ANKIT + I_ANKIT: crossbar (independent copy for ANKIT) -->
+      <path id="s54-ankit" class="stroke" data-letters="T_ANKIT,I_ANKIT,A_ANKIT,A_TANVI"
+        d="m 171.77563,171.34076 h 52.83732"/>
+
+      <!-- T_ANKIT + I_ANKIT: stem (independent copy for ANKIT) -->
+      <path id="s57-ankit" class="stroke" data-letters="T_ANKIT,I_ANKIT"
+        d="M 198.30521,198.56979 198.4375,238.125"/>
+
+      <!-- T_TANVI + I_TANVI: crossbar (independent copy for TANVI) -->
+      <path id="s54-tanvi" class="stroke" data-letters="T_TANVI,I_TANVI"
+        d="m 171.77563,171.34076 h 52.83732"/>
+
+      <!-- T_TANVI + I_TANVI: stem (independent copy for TANVI) -->
+      <path id="s57-tanvi" class="stroke" data-letters="T_TANVI,I_TANVI"
+        d="M 198.30521,198.56979 198.4375,238.125"/>
+
+      <text class="wm" x="198" y="272" text-anchor="middle">FEELTWO.COM</text>
+    </svg>
+  </div>
+
+  <div class="controls">
+    <div class="tap-label">Tap each letter to reveal it</div>
+
+    <div class="name-tag">ANKIT</div>
+    <div class="letter-buttons">
+      <div class="letter-btn" id="btn-A-ankit" onclick="tap('A_ANKIT')">A</div>
+      <div class="letter-btn" id="btn-N-ankit" onclick="tap('N_ANKIT')">N</div>
+      <div class="letter-btn" id="btn-K"       onclick="tap('K')">K</div>
+      <div class="letter-btn" id="btn-I-ankit" onclick="tap('I_ANKIT')">I</div>
+      <div class="letter-btn" id="btn-T-ankit" onclick="tap('T_ANKIT')">T</div>
+    </div>
+
+    <div class="sep"></div>
+
+    <div class="name-tag">TANVI</div>
+    <div class="letter-buttons">
+      <div class="letter-btn" id="btn-T-tanvi" onclick="tap('T_TANVI')">T</div>
+      <div class="letter-btn" id="btn-A-tanvi" onclick="tap('A_TANVI')">A</div>
+      <div class="letter-btn" id="btn-N-tanvi" onclick="tap('N_TANVI')">N</div>
+      <div class="letter-btn" id="btn-V"       onclick="tap('V')">V</div>
+      <div class="letter-btn" id="btn-I-tanvi" onclick="tap('I_TANVI')">I</div>
+    </div>
+
+    <div class="action-buttons">
+      <div class="action-btn reveal-btn" onclick="tapAll()">&#9711; Reveal All</div>
+      <div class="action-btn hide-btn"   onclick="tapNone()">&#10005; Hide All</div>
+    </div>
+  </div>
+
+  <div id="fusionPanel" class="fusion-panel" style="display:none"></div>
+</div>
+
+<p class="footer">feeltwo.com · the secret is in the geometry</p>
+
+<script>
+var MAP = {
+  A_ANKIT: ['s48','s52','s54-ankit'],
+  N_ANKIT: ['s49','s55','s491'],
+  K:       ['s55','s491','s56'],
+  I_ANKIT: ['s54-ankit','s56','s57-ankit'],
+  T_ANKIT: ['s54-ankit','s57-ankit'],
+  A_TANVI: ['s48','s52','s54-ankit'],
+  N_TANVI: ['s49','s55','s491'],
+  V:       ['s55','s491'],
+  I_TANVI: ['s54-tanvi','s56','s57-tanvi'],
+  T_TANVI: ['s54-tanvi','s57-tanvi']
+};
+
+var BTNS = {
+  A_ANKIT: ['btn-A-ankit'],
+  N_ANKIT: ['btn-N-ankit'],
+  K:       ['btn-K'],
+  I_ANKIT: ['btn-I-ankit'],
+  T_ANKIT: ['btn-T-ankit'],
+  A_TANVI: ['btn-A-tanvi'],
+  N_TANVI: ['btn-N-tanvi'],
+  V:       ['btn-V'],
+  I_TANVI: ['btn-I-tanvi'],
+  T_TANVI: ['btn-T-tanvi']
+};
+
+var INFO = {
+  A_ANKIT: 'A (ANKIT) · two legs + crossbar',
+  N_ANKIT: 'N (ANKIT) · outer legs + inner diagonal',
+  K:       'K · two diagonals + midline',
+  I_ANKIT: 'I (ANKIT) · crossbar + stem + base',
+  T_ANKIT: 'T (ANKIT) · top bar + stem',
+  A_TANVI: 'A (TANVI) · two legs + crossbar',
+  N_TANVI: 'N (TANVI) · outer legs + inner diagonal',
+  V:       'V · two converging arms',
+  I_TANVI: 'I (TANVI) · crossbar + stem + base',
+  T_TANVI: 'T (TANVI) · top bar + stem'
+};
+
+var active = {};
+
+function tap(l) {
+  active[l] = !active[l];
+  BTNS[l].forEach(function(id){
+    var b = document.getElementById(id);
+    if(b){ if(active[l]) b.classList.add('active'); else b.classList.remove('active'); }
+  });
+  refresh();
+}
+
+function tapAll() {
+  Object.keys(MAP).forEach(function(l){
+    active[l] = true;
+    BTNS[l].forEach(function(id){ var b=document.getElementById(id); if(b) b.classList.add('active'); });
+  });
+  refresh();
+}
+
+function tapNone() {
+  Object.keys(MAP).forEach(function(l){
+    active[l] = false;
+    BTNS[l].forEach(function(id){ var b=document.getElementById(id); if(b) b.classList.remove('active'); });
+  });
+  refresh();
+}
+
+function refresh() {
+  var svg = document.getElementById('monogram');
+  document.querySelectorAll('.stroke').forEach(function(el){
+    var on = el.getAttribute('data-letters').split(',').some(function(l){ return active[l.trim()]; });
+    if(on){
+      el.classList.add('active');
+      svg.appendChild(el);
+    } else {
+      el.classList.remove('active');
+    }
+  });
+  var panel = document.getElementById('fusionPanel');
+  var keys = Object.keys(active).filter(function(l){ return active[l]; });
+  if(keys.length===0){ panel.style.display='none'; return; }
+  panel.style.display='block';
+  panel.innerHTML = keys.map(function(l){ return '<div class="fusion-row">'+INFO[l]+'</div>'; }).join('');
+}
+</script>
+</body>
+</html>
